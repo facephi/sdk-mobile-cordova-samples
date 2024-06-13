@@ -111,47 +111,6 @@ function callInitOperation()
     });
 }
 
-function callGetExtraData()
-{
-    if (typeof facephi.plugins.sdkcore === "undefined") {
-        showErrorUI("Cordova Core Sdk is not installed...");
-        return;
-    }
-
-    console.log('callGetExtraData started...');
-    $("#messageResult").html("Starting proccess...").addClass("blink").css("color", "#000000").css("text-align","center").show();
-
-    if (isStartingSDK) {
-        console.log("A process is running...");
-        return false;
-    }
-    if (!isStartingSDK) {
-        isStartingSDK = true;
-    }
-
-    data = null;
-    facephi.plugins.sdkcore.launchGetExtraData()
-    .then(
-        (result) => {
-            console.log(result);
-            if (parseInt(result.finishStatus) == 1)
-            {
-                data = result.data;
-
-                passiveLivenessEvaluate();
-                authenticateFacialDocument();
-            }
-        },
-        (err) => console.log(err),
-    )
-    .finally (() =>
-    {
-        isStartingSDK = false
-        console.log("callGetExtraData finished...");
-        $("#messageResult").html("").removeClass("blink").css("color", "#ff0000").css("text-align", "center").show();
-    });
-}
-
 function callTokenize()
 {
     if (typeof facephi.plugins.sdkcore === "undefined") {
@@ -172,45 +131,4 @@ function callTokenize()
     {
         console.log("callTokenize finished...");
     });
-}
-
-async function callFlow()
-{
-    if (typeof window.broadcaster === "undefined")
-    {
-        showErrorUI("Cordova broadcaster Sdk is not installed...");
-    }
-    else
-    {
-        window.broadcaster.addEventListener("core.flow", listener);
-    }
-
-    if (typeof facephi.plugins.sdkcore === "undefined") {
-        showErrorUI("Cordova Core Sdk is not installed...");
-        return;
-    }
-
-    console.log('callFlow started...');
-
-    await facephi.plugins.sdkcore.launchInitFlow({
-         "customerId": "cordoba@facephi.com",
-         "flow": "acc560f0-8cbc-475b-b479-1f22ae5cdae8",
-         "preview": false
-     })
-    .then(
-        (result) => { console.log("launchInitFlow result", result); },
-        (err) => console.log(err),
-    );
-
-    await facephi.plugins.sdknfc.setNfcFlow()
-    .then(
-        (result) => { console.log("setNfcFlow result", result); },
-        (err) => console.log(err),
-    );
-
-    await facephi.plugins.sdkcore.launchStartFlow()
-    .then(
-        (result) => { console.log("launchStartFlow result", result); },
-        (err) => console.log(err),
-    );
 }
