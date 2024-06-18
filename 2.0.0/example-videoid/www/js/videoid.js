@@ -20,7 +20,7 @@ function callVideoId()
 
     var config = new SdkVideoIdConfig();
     config.setMode(facephi.plugins.sdkvideoid.mode.SdkVideoIdMode.face_document_front)
-    config.setTime(5000);
+    config.setSectionTime(5000);
     config.setShowTutorial(true);
 
     videoIdResponse = null;
