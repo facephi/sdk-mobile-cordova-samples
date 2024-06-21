@@ -20,9 +20,7 @@
       },
       "cordova-plugin-statusbar": {}
     },
-    "platforms": [
-      "android"
-    ]
+    "platforms": []
   },
   "devDependencies": {
     "cordova-plugin-add-swift-support": "^2.0.2",
