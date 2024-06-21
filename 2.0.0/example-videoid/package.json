@@ -13,10 +13,22 @@
   "author": "Apache Cordova Team",
   "license": "Apache-2.0",
   "cordova": {
-    "plugins": {},
-    "platforms": []
+    "plugins": {
+      "cordova-plugin-broadcaster": {},
+      "cordova-plugin-advanced-http": {
+        "ANDROIDBLACKLISTSECURESOCKETPROTOCOLS": "SSLv3,TLSv1"
+      },
+      "cordova-plugin-statusbar": {}
+    },
+    "platforms": [
+      "android"
+    ]
   },
   "devDependencies": {
-    "cordova-plugin-add-swift-support": "^2.0.2"
+    "cordova-plugin-add-swift-support": "^2.0.2",
+    "cordova-plugin-advanced-http": "^3.3.1",
+    "cordova-plugin-broadcaster": "^5.2.0",
+    "cordova-plugin-file": "^8.1.0",
+    "cordova-plugin-statusbar": "^4.0.0"
   }
 }
