@@ -1,9 +1,4 @@
-var data        = null;
-var listener    = function(e)
-{
-  //console.log("core.flow received!: " + JSON.stringify(e));
-  console.log("core.flow received!: ", e);
-}
+var data = null;
 
 function callCloseSession()
 {
@@ -177,15 +172,6 @@ function callTokenize()
 
 async function callFlow()
 {
-    if (typeof window.broadcaster === "undefined")
-    {
-        showErrorUI("Cordova broadcaster Sdk is not installed...");
-    }
-    else
-    {
-        window.broadcaster.addEventListener("core.flow", listener);
-    }
-
     if (typeof facephi.plugins.sdkcore === "undefined") {
         showErrorUI("Cordova Core Sdk is not installed...");
         return;
@@ -195,7 +181,7 @@ async function callFlow()
 
     await facephi.plugins.sdkcore.launchInitFlow({
          "customerId": "cordoba@facephi.com",
-         "flow": "FLOW_B",
+         "flow": "acc560f0-8cbc-475b-b479-1f22ae5cdae8",
          "preview": false
      })
     .then(

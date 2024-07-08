@@ -28,6 +28,7 @@ function callSelphi()
     config.setDebug(false);
     config.setEnableFullscreen(true);
     config.setResourcesPath("fphi-selphi-widget-resources-sdk.zip");
+    config.setLocale("es");
 
     facephi.plugins.sdkselphi.launchSelphi(config)
     .then(
