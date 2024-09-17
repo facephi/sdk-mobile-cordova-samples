@@ -67,6 +67,7 @@ const fphi_str_phingers_licensing_failure = "Phingers licensing failure.";
 const fphi_str_phingers_liveness_failure = "Phingers liveness failure.";
 const fphi_str_phingers_no_detected = "Phingers no detected.";
 const fphi_str_phingers_unique_userid_not_specified = "Phingers unique userId not specified.";
+const fphi_str_license_checker_error = "License Checker Error";
 
 /**
  * Method to show an error in the UI
