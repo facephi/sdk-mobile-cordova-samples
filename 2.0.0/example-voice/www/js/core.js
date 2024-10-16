@@ -152,28 +152,6 @@ function callGetExtraData()
     });
 }
 
-function callTokenize()
-{
-    if (typeof facephi.plugins.sdkcore === "undefined") {
-        showErrorUI("Cordova Core Sdk is not installed...");
-        return;
-    }
-
-    console.log('callTokenize started...');
-
-    facephi.plugins.sdkcore.launchTokenize({
-        "stringToTokenize": "something to tokenize..."
-    })
-    .then(
-        (result) => console.log(result),
-        (err) => console.log(err),
-    )
-    .finally (() =>
-    {
-        console.log("callTokenize finished...");
-    });
-}
-
 async function callFlow()
 {
     if (typeof window.broadcaster === "undefined")
