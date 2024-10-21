@@ -26,7 +26,7 @@ function callSelphID()
     config_id.showResultAfterCapture    = true;
     config_id.showTutorial              = false;
     config_id.scanMode                  = facephi.plugins.scanmode.SdkSelphIDScanMode.SearchMode;
-    config_id.timeout                   = facephi.plugins.timeout.SdkSelphIDTimeout.Short;
+    config_id.timeout                   = facephi.plugins.selphid.timeout.SdkSelphIDTimeout.Short;
     config_id.documentType              = facephi.plugins.doctype.SdkSelphIDDocumentType.IDCard;
     config_id.resourcesPath             = "fphi-selphid-widget-resources-sdk.zip";
     config_id.specificData              = "AR|<ALL>";
