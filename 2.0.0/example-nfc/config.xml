@@ -1,0 +1,36 @@
+<?xml version='1.0' encoding='utf-8'?>
+<widget id="com.facephi.sdk.demo" version="1.0.0" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+    <name>Nfc Example</name>
+    <description>Sample SdkMobile Cordova App</description>
+    <author email="lariel@facephi.com" href="https://cordova.apache.org">
+        Facephi Team
+    </author>
+    <content src="index.html" />
+    <allow-intent href="http://*/*" />
+    <allow-intent href="https://*/*" />
+    
+    <dependency id="cordova-plugin-cocoapod-support"/>
+    <dependency id="cordova-plugin-statusbar"/>
+    <dependency id="cordova-plugin-advanced-http"/>
+    <dependency id="cordova-plugin-broadcaster"/>
+
+    <platform name="android">
+        <preference name="GradlePluginKotlinVersion" value="1.8.0" />
+        <preference name="GradlePluginKotlinEnabled" value="true" />
+        <preference name="AndroidGradlePluginVersion" value="8.3.0" />
+        <preference name="android-compileSdkVersion" value="34" />
+        <preference name="android-minSdkVersion" value="24" />
+        <preference name="android-targetSdkVersion" value="34" />
+        <!-- needs cordova-plugin-statusbar -->
+        <preference name="StatusBarOverlaysWebView" value="false" />
+    </platform>
+
+    <platform name="ios">
+        <preference name="deployment-target" value="13.0" />
+        <preference name="UseSwiftLanguageVersion" value="5" />
+        <!-- needs cordova-plugin-statusbar -->
+        <preference name="StatusBarOverlaysWebView" value="false" />
+        <preference name="StatusBarBackgroundColor" value="#000000" />
+        <preference name="StatusBarStyle" value="lightcontent" />
+    </platform>
+</widget>

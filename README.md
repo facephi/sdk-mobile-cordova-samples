@@ -1,1 +1,1 @@
-# sdk-mobile-cordova-samples-fix
+# sdk-mobile-cordova-samples
