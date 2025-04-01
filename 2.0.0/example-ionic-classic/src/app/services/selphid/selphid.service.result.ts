@@ -13,12 +13,12 @@ export interface SelphIDResult
     * Returns the description of the finishStatus
     * @since 1.0.0
     */
-    finishStatusDescription?: string;
+    finishStatusDescription: string;
     /**
     * Returns the type of error that has occurred (if there has been one, which is indicated in the `finishStatus` parameter with the value `error`)
     * @since 1.0.0
     */
-    errorType: number;
+    errorType: string;
     /**
     * Indicates an additional error message if needed. It is an optional value.
     * @since 1.0.0

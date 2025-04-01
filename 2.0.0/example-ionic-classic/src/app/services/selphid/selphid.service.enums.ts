@@ -27,7 +27,8 @@ export enum SelphIDDocumentType {
     DriverLicense = "DriverLicense",
     ForeignCard = "ForeignCard",
     CreditCard = "CreditCard",
-    Custom = "Custom"
+    Custom = "Custom",
+    Visa = "Visa"
 }
 /**
  * Enum for SelphIDScanMode values.
