@@ -21,11 +21,7 @@ function callPhingers()
     phingersResponse    = null;
     var config          = new SdkPhingersConfig();
     // SdkPhingersCaptureOrientation capture orientation.
-    config.setReticleOrientation(facephi.plugins.sdkphingers.captureorientation.SdkPhingersCaptureOrientation.left)
-    config.setReturnFullFrameImage(true);
-    config.setReturnProcessedImage(true);
-    config.setReturnRawImage(true);
-    config.setUseFlash(true);
+    config.setReticleOrientation(facephi.plugins.sdkphingers.captureorientation.SdkPhingersCaptureOrientation.left);
     config.setUseLiveness(true);
 
     //const lic = "4700-8415-1478-1-2";
