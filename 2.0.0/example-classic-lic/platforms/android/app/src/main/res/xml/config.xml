@@ -1,0 +1,37 @@
+<?xml version='1.0' encoding='utf-8'?>
+<widget id="com.facephi.sdk.demo" version="2.0.0" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+    <feature name="File">
+        <param name="android-package" value="org.apache.cordova.file.FileUtils" />
+        <param name="onload" value="true" />
+    </feature>
+    <allow-navigation href="cdvfile:*" />
+    <feature name="broadcaster">
+        <param name="android-package" value="org.bsc.cordova.CDVBroadcaster" />
+    </feature>
+    <feature name="CordovaHttpPlugin">
+        <param name="android-package" value="com.silkimen.cordovahttp.CordovaHttpPlugin" />
+    </feature>
+    <feature name="StatusBar">
+        <param name="android-package" value="org.apache.cordova.statusbar.StatusBar" />
+        <param name="onload" value="true" />
+    </feature>
+    <name>Onboarding Example</name>
+    <description>Onboarding Ionic/Cordova app.</description>
+    <author email="lariel@facephi.com" href="https://cordova.apache.org">
+        Facephi Team
+    </author>
+    <content src="index.html" />
+    <allow-intent href="http://*/*" />
+    <allow-intent href="https://*/*" />
+    <dependency id="cordova-plugin-cocoapod-support" />
+    <dependency id="cordova-plugin-statusbar" />
+    <dependency id="cordova-plugin-advanced-http" />
+    <dependency id="cordova-plugin-broadcaster" />
+    <preference name="loglevel" value="DEBUG" />
+    <preference name="StatusBarOverlaysWebView" value="false" />
+    <preference name="GradlePluginKotlinVersion" value="1.9.0" />
+    <preference name="AndroidGradlePluginVersion" value="8.1.4" />
+    <preference name="android-compileSdkVersion" value="34" />
+    <preference name="android-minSdkVersion" value="24" />
+    <preference name="android-targetSdkVersion" value="34" />
+</widget>
