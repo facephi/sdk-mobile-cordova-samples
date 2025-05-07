@@ -61,7 +61,6 @@ export interface SelphiFaceConfiguration {
     showTutorial?: boolean;
     showResultAfterCapture?: boolean;
     fullscreen?: boolean;
-    locale?: string;
     qrMode?: boolean;
     translationsContent?: string;
     viewsContent?: string;

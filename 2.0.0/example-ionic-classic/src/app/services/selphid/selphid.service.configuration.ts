@@ -47,13 +47,6 @@ export interface SelphIDConfiguration
     */
     fullscreen?: number;
     /**
-    * This is a string that allows you to change the location and language of the widget. Examples of values they can have are the following:
-    * @property {string}
-    * @default ES
-    * @since 1.0.0
-    */
-    locale?: string;
-    /**
     * Specifies the compression quality of the tokenFaceImage.
     * @property {number}
     * @default 0.9
