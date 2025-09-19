@@ -25,6 +25,5 @@ export interface InitSessionConfiguration {
     */
     licenseApiKey?: string;
     enableTracking?: boolean;
-    enableFlow?: boolean;
     locale?: string;
 }

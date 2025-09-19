@@ -27,9 +27,5 @@ export interface CoreResult {
     *
     * @since 1.0.0
     */
-    tokenized?: string;
-    operationId?: string;
-    sessionId?: string;
     data?: string;
-    flow?: string;
 }

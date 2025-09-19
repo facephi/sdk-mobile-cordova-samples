@@ -49,8 +49,7 @@ function callInitSession()
         //"license": lic,
         "licenseUrl": LICENSE_URL,
         "licenseApiKey": apiKey,
-        "enableTracking": true,
-        "enableFlow": false,
+        "enableTracking": true
     })
     .then(
         (result) =>

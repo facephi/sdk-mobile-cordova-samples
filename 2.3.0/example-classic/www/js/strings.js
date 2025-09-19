@@ -3,7 +3,7 @@ var isStartingSDK   = false;
 const CUSTOMER_ID               = "cordoba@facephi.com";
 const LICENSE_APIKEY_ANDROID    = "";
 const LICENSE_APIKEY_IOS        = "";
-const LICENSE_URL               = "https://licensing.facephi.pro";
+const LICENSE_URL               = "";
 const LICENSEIOS_NEW            = "{}";
 const LICENSEANDROID_NEW        = "{}";
 
