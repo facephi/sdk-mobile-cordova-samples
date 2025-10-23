@@ -172,8 +172,7 @@ async function callFlow()
 
     await facephi.plugins.sdkcore.launchInitFlow({
          "customerId": "cordoba@facephi.com",
-         "flow": "acc560f0-8cbc-475b-b479-1f22ae5cdae8",
-         "preview": false
+         "flow": "acc560f0-8cbc-475b-b479-1f22ae5cdae8"
      })
     .then(
         (result) => { console.log("launchInitFlow result", result); },

@@ -12,5 +12,4 @@ export interface InitFlowConfiguration {
     */
     customerId: string;
     flow: string;
-    preview?: boolean;
 }
