@@ -1,7 +1,7 @@
 {
   "name": "com.facephi.sdk.demo",
   "displayName": "Voice Example",
-  "version": "2.3.0",
+  "version": "2.4.0",
   "description": "A sample Apache Cordova application that responds to the deviceready event.",
   "main": "index.js",
   "scripts": {
