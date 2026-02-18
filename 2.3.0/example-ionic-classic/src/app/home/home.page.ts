@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { fphi_str_activity_result_error, fphi_str_camera_error, fphi_str_camera_permission_denied, fphi_str_component_controller_application_error, fphi_str_component_controller_error, fphi_str_extractor_license_error, fphi_str_generic_bad_extractor_conf, fphi_str_generic_control_not_initialized, fphi_str_generic_extraction_license, fphi_str_generic_unexpected_captured, fphi_str_hardware_error, fphi_str_init_proccess_error, fphi_str_init_session_error, fphi_str_initialization_error, fphi_str_license_checker_error_invalid_component_license, fphi_str_license_checker_error_invalid_license, fphi_str_license_string_error, fphi_str_licensing_error_api_key_forbidden, fphi_str_licensing_error_app_id_invalid, fphi_str_licensing_error_license_not_found, fphi_str_licensing_error_package_name, fphi_str_network_connection, fphi_str_nfc_error, fphi_str_nfc_error_data, fphi_str_nfc_error_disabled, fphi_str_nfc_error_illegal_argument, fphi_str_nfc_error_not_supported, fphi_str_nfc_error_tag_lost, fphi_str_no_data_error, fphi_str_no_operation_created_error, fphi_str_permission_denied, fphi_str_phacturas_capture_error, fphi_str_phingers_autofocus_failure, fphi_str_phingers_camera_failure, fphi_str_phingers_capture_failure, fphi_str_phingers_configuration_failure, fphi_str_phingers_fingerprint_capture_failure, fphi_str_phingers_fingerprint_template_io_error, fphi_str_phingers_licensing_failure, fphi_str_phingers_liveness_failure, fphi_str_phingers_no_detected, fphi_str_phingers_unique_userid_not_specified, fphi_str_qr_capture_error, fphi_str_qr_generation_error, fphi_str_resourses_not_found, fphi_str_sdk_init_flow, fphi_str_sdk_not_initialized, fphi_str_settings_permission_denied, fphi_str_stopped_manually, fphi_str_timeout, fphi_str_token_error, fphi_str_tracking_error, fphi_str_unknown_error, fphi_str_video_error } from '../constants';
 import { SdkErrorType, SdkFinishStatus } from '../services/core/core.service.enums';
 import { SelphidService } from '../services/selphid/selphid.service';
@@ -10,7 +10,8 @@ import { CoreResult } from '../services/core/core.service.core.result';
 import { SelphiFaceResult } from '../services/selphi-face/selphi.service.result';
 import { SelphIDResult } from '../services/selphid/selphid.service.result';
 import { LoadingController } from '@ionic/angular';
-import { Broadcaster } from '@awesome-cordova-plugins/broadcaster';
+
+declare let facephi: any;
 
 @Component({
   selector: 'app-home',
@@ -18,7 +19,7 @@ import { Broadcaster } from '@awesome-cordova-plugins/broadcaster';
   styleUrls: ['home.page.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class HomePage 
+export class HomePage implements OnInit
 {
   // UriImage header for base64 images visualization.
   URI_JPEG_HEADER = 'data:image/jpeg;base64,';
@@ -53,14 +54,44 @@ export class HomePage
     this.selphidService = selphidService;
     this.coreService = coreService;
     this.apiRest = apiRest;
+  }
 
-    setTimeout(() => {                       
-      this.subscription = Broadcaster.addEventListener("core.flow")
-      .subscribe( (event: any) => console.log( "core.flow received", JSON.stringify(event)) );
-  
-      this.subscriptionTracking = Broadcaster.addEventListener("tracking.error.listener")
-      .subscribe( (event: any) => console.log( "tracking.error.listener received", JSON.stringify(event)) );
-    }, 3000);
+  ngOnInit(): void 
+  {
+    this.initListeners();
+  }
+
+  initListeners(): void 
+  {
+    document.addEventListener('deviceready', () => 
+    {
+      facephi.plugins.sdkcore.startListeningTrackingEvents(
+        (event: any) => console.log('Tracking:', event)
+      );
+
+      facephi.plugins.sdkcore.startListeningFlowEvents(
+        (event: any) => console.log('Flow:', event)
+      );
+    });
+  }
+
+  safeJsonParse(data: any) 
+  {
+    if (typeof data !== 'string') {
+      return data;
+    }
+
+    try {
+      return JSON.parse(data);
+    } catch (e1) {
+      try {
+        // Segundo intento (doble serialización)
+        return JSON.parse(JSON.parse(data));
+      } catch (e2) {
+        console.error('❌ JSON inválido:', data);
+        throw e2;
+      }
+    }
   }
 
   onLaunchFlow = async () => 
@@ -282,7 +313,8 @@ export class HomePage
           this.frontDocumentImage = this.URI_JPEG_HEADER + result.frontDocumentImage;
           this.backDocumentImage  = this.URI_JPEG_HEADER + result.backDocumentImage;
           this.faceImage          = (typeof result.faceImage === 'undefined' || result.faceImage === '') ? "./assets/images/image_no_available.png" : this.URI_JPEG_HEADER + result.faceImage;
-          this.ocrData            = JSON.parse(result.documentData.replace(/\\/g, ""));
+          //this.ocrData          = JSON.parse(result.documentData.replace(/\\/g, ""));
+          this.ocrData            = this.safeJsonParse(result.documentData);
           this.isListExpanded     = true;
           this.showError          = false;
           this.message            = 'Preview selfie';

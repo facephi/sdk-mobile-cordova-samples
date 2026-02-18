@@ -15,7 +15,7 @@
     <dependency id="cordova-plugin-broadcaster"/>
     
     <platform name="android">
-        <preference name="GradlePluginKotlinVersion" value="2.1.0" />
+        <preference name="GradlePluginKotlinVersion" value="2.2.0" />
         <preference name="GradlePluginKotlinEnabled" value="true" />
         <preference name="AndroidGradlePluginVersion" value="8.9.3" />
         <preference name="android-compileSdkVersion" value="36" />

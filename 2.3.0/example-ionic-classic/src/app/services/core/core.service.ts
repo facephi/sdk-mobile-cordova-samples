@@ -31,7 +31,7 @@ export class CoreService
       //license: pluginLicense,
       licenseUrl: LICENSE_URL,
       licenseApiKey: pluginLicenseApiKey,
-      enableTracking: false
+      enableTracking: true
     };
 
     return facephi.plugins.sdkcore.launchInitSession(widgetConfig);
