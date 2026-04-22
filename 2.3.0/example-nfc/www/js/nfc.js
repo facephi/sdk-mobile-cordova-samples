@@ -18,7 +18,7 @@ function callNfc()
 
     var config = new SdkNfcConfig();
 
-    config.setDocNumber("AAA439684");
+    config.setDocumentNumber("AAA439684");
     config.setBirthDate("16/08/1979");
     config.setExpirationDate("29/11/2022");
     config.setExtractionTimeout(50000);
