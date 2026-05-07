@@ -23,8 +23,8 @@ export class AppModule
     {
       console.log('initializeApp');
       setPrefersDarkMode();
-
       console.log("initSession starts.")
+      
       await this.coreService.initSession()
       .then((result: CoreResult) => console.log(result), (err: any) => console.log(err)).finally(() => console.log("initSession ends."));
     });

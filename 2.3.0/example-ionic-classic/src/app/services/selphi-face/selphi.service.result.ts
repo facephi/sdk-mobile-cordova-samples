@@ -11,7 +11,7 @@ export interface SelphiFaceResult {
     *
     * @since 1.0.0
     */
-    finishStatusDescription: string;
+    finishStatusDescription?: string;
     /**
     * Returns the type of error that has occurred (if there has been one, which is indicated in the `finishStatus` parameter with the value `error`)
     *
@@ -73,4 +73,5 @@ export interface SelphiFaceResult {
     */
     bestImageCropped?: string;
     livenessDiagnostic?: string;
+    tokenFaceImage?: string;
 }

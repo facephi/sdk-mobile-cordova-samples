@@ -27,5 +27,5 @@ export interface CoreResult {
     *
     * @since 1.0.0
     */
-    data?: string;
+    data?: any;
 }

@@ -25,5 +25,7 @@ export interface InitSessionConfiguration {
     */
     licenseApiKey?: string;
     enableTracking?: boolean;
+    enableDebugMode?: boolean;
+    internalOptions?: Record<string, string>;
     locale?: string;
 }
