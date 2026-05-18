@@ -5,8 +5,8 @@ const LICENSE_APIKEY_ANDROID    = "";
 const LICENSE_APIKEY_IOS        = "";
 const LICENSE_URL               = "";
 
-const LICENSEIOS_NEW        = "{}";
-const LICENSEANDROID_NEW    = "{}";
+const LICENSEIOS_NEW            = "{}";
+const LICENSEANDROID_NEW        = "{}";
 
 /// FINISH_STATUS MESSAGES
 const fphi_str_stopped_manually = "User cancelled the process.";

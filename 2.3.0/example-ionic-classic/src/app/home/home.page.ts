@@ -246,7 +246,6 @@ export class HomePage implements OnInit
           this.processSelphiSuccessResult(result); // Logging the info for debug purposes
           this.selphiResult                   = result;
           this.selphiResult!.bestImageCropped = this.URI_JPEG_HEADER + result.bestImageCropped!;
-          this.selphiResult!.bestImage        = result.bestImage;
           this.showError                      = false;
           //this.message                      = 'Preview selfie';
           break;
