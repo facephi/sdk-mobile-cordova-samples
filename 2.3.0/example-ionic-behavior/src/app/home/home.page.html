@@ -1,0 +1,27 @@
+<ion-header [translucent]="true">
+    <ion-toolbar color="bluefp">
+        <ion-title class="labelTitleSelphi">
+          Sdk Mobile 360
+        </ion-title>
+    </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" class="centered-content">
+    <ion-grid class="centered-grid">
+        <ion-row class="buttonRowSdk">
+            <ion-col class="buttonColSdk">
+                <ion-button class="buttonSdk" (click)='launchClearSessionData()' color="bluefp">Clear Session Data</ion-button>
+            </ion-col>
+        </ion-row>
+        <ion-row class="buttonRowSdk">
+            <ion-col class="buttonColSdk">
+                <ion-button class="buttonSdk" (click)='reLaunchBehavior()' color="bluefp">Re Launch Behavior</ion-button>
+            </ion-col>
+        </ion-row>
+        <ion-row class="buttonRowSdk">
+            <ion-col class="buttonColSdk">
+                <ion-button class="buttonSdk" (click)='launchSetSessionId()' color="bluefp">Set Session Id</ion-button>
+            </ion-col>
+        </ion-row>
+    </ion-grid>
+</ion-content>

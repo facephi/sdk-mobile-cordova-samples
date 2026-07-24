@@ -1,0 +1,17 @@
+CREATE WWW(IMPORTANTE SI CAMBIAS EL package.json): 
+npm run build
+ionic cordova prepare android
+ionic cordova prepare android --no-build
+ionic cordova run android -l
+
+HOT RELOAD:
+/* IMPORTANTE: desinstalar la app del celular para evitar problemas */
+ionic cordova run android --livereload --device
+ionic cordova run android -l
+
+FOR IOS:
+ionic cordova run ios --livereload --external
+
+HOT RELOAD MAS TUNEADO (elige node 20 & java 17):
+bash -lc "source \"$HOME/.nvm/nvm.sh\" && nvm use 20 && export JAVA_HOME=\"/opt/homebrew/opt/openjdk@17/libexec/openjdk.jdk/Contents/Home\" && export PATH=\"$JAVA_HOME/bin:$PATH\" && ionic cordova run android -l"
+
