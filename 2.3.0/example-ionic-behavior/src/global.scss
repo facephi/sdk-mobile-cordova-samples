@@ -40,3 +40,8 @@
     font-weight: normal;
     src: url('./assets/fonts/circular-std-bold.ttf'); //mine
 }
+
+/* Cordova: StatusBar no overlay → evita toolbar con altura doble por safe-area */
+ion-header ion-toolbar:first-of-type {
+  padding-top: 0;
+}

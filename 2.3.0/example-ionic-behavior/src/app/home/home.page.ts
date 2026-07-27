@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { LoadingController, Platform } from '@ionic/angular';
 import { BehaviorService } from '../services/behavior/behavior.service';
 import { BehaviorResult } from '../services/behavior/behavior.service.result';
@@ -12,10 +12,11 @@ import { BehaviorConfiguration } from '../services/behavior/behavior.config';
     changeDetection: ChangeDetectionStrategy.OnPush,
     standalone: false
 })
-export class HomePage implements OnInit
+export class HomePage implements OnInit, AfterViewInit
 {
   behaviorService: BehaviorService;
   message: string                   = "";
+  textInput: string                 = "";
   showError: boolean                = false;
   isDocumentDataSheetOpen: boolean  = false;
 
@@ -33,23 +34,22 @@ export class HomePage implements OnInit
     console.log("HomePage ngOnInit");
   }
 
-  safeJsonParse(data: any) 
+  async ngAfterViewInit(): Promise<void>
   {
-    if (typeof data !== 'string') {
-      return data;
+    const ionInput = document.getElementById('textInput') as HTMLIonInputElement | null;
+    if (!ionInput) {
+      console.log('textInput not found');
+      return;
     }
 
-    try {
-      return JSON.parse(data);
-    } catch (e1) {
-      try {
-        // Segundo intento (doble serialización)
-        return JSON.parse(JSON.parse(data));
-      } catch (e2) {
-        console.error('❌ JSON inválido:', data);
-        throw e2;
-      }
-    }
+    const nativeInput = await ionInput.getInputElement();
+    this.behaviorService.initializeRegisterField(nativeInput, 'text');
+  }
+
+  dismissKeyboard = (): void =>
+  {
+    const active = document.activeElement as HTMLElement | null;
+    active?.blur();
   }
 
   reLaunchBehavior = async () => 
@@ -85,6 +85,19 @@ export class HomePage implements OnInit
     .finally(() => console.log("clearSessionData ends."));
   }
 
+  launchSetAutoLogoutAction = async () => 
+  {
+    this.message = '';
+
+    console.log("setAutoLogoutAction starts...");
+    await this.behaviorService.setAutoLogoutAction()
+    .then(
+      (result: BehaviorResult) => console.log(result), 
+      (err: any) => console.log(err)
+    )
+    .finally(() => console.log("setAutoLogoutAction ends."));
+  }
+
   launchSetSessionId = async () => 
   {
     this.message = '';
@@ -96,6 +109,33 @@ export class HomePage implements OnInit
       (err: any) => console.log(err)
     )
     .finally(() => console.log("setSessionId ends."));
+  }
+
+  launchSetUserId = async () => 
+  {
+    this.message = '';
+
+    console.log("setUserId starts...");
+    await this.behaviorService.setUserId("add userId...")
+    .then(
+      (result: BehaviorResult) => console.log(result), 
+      (err: any) => console.log(err)
+    )
+    .finally(() => console.log("setUserId ends."));
+  }
+
+  launchSetPosition = async () => 
+  {
+    this.message = '';
+
+    console.log("setPosition starts...");
+    await this.behaviorService.setPosition("add position...")
+    
+    .then(
+      (result: BehaviorResult) => console.log(result), 
+      (err: any) => console.log(err)
+    )
+    .finally(() => console.log("setPosition ends."));
   }
 
   private printError(data: any)

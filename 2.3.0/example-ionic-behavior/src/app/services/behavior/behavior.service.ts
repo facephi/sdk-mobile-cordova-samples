@@ -12,6 +12,17 @@ export class BehaviorService
 {
   constructor(public platform: Platform) { }       
 
+  initializeRecordTouchEvent = (): void => 
+  {
+    console.log("initializeRecordTouchEvent starts...");
+    facephi.plugins.wgt.behavior.recordTouchEvent();
+  };
+
+  initializeRegisterField = (element: HTMLInputElement, fieldType: string): void => 
+  {
+    facephi.plugins.wgt.behavior.registerField(element, fieldType);
+  };
+
   initializeBehavior = async (value: BehaviorConfiguration): Promise<BehaviorResult> => 
   {
     return facephi.plugins.wgt.behavior.initialize(value);
@@ -35,5 +46,10 @@ export class BehaviorService
   clearSessionData = async (): Promise<BehaviorResult> => 
   {
     return facephi.plugins.wgt.behavior.clearSessionData();
+  };
+
+  setAutoLogoutAction = async (): Promise<BehaviorResult> => 
+  {
+    return facephi.plugins.wgt.behavior.setAutoLogoutAction();
   };
 }

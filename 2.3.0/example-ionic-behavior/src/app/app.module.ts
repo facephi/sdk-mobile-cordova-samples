@@ -32,7 +32,13 @@ export class AppModule
 
       await this.behaviorService.initializeBehavior(cfg)
       .then(
-        (result: BehaviorResult) => console.log(result), 
+        (result: BehaviorResult) =>  {
+          console.log(result);
+          if (result.finishStatus === 1)
+          { 
+            this.behaviorService.initializeRecordTouchEvent();
+          }
+        },
         (err: any) => console.log(err)
       ).finally(
         () => console.log("initSession ends.")

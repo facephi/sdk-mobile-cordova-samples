@@ -1,4 +1,4 @@
-<ion-header [translucent]="true">
+<ion-header>
     <ion-toolbar color="bluefp">
         <ion-title class="labelTitleSelphi">
           Sdk Mobile 360
@@ -6,8 +6,21 @@
     </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true" class="centered-content">
+<ion-content class="centered-content">
     <ion-grid class="centered-grid">
+        <ion-row class="buttonRowSdk">
+            <ion-col class="buttonColSdk" style="padding-left: 15%; padding-right: 15%;">
+                <ion-input
+                    id="textInput"
+                    type="text"
+                    enterkeyhint="done"
+                    placeholder="Text Input type events..."
+                    fill="outline"
+                    [(ngModel)]="textInput"
+                    (keyup.enter)="dismissKeyboard()">
+                </ion-input>
+            </ion-col>
+        </ion-row>
         <ion-row class="buttonRowSdk">
             <ion-col class="buttonColSdk">
                 <ion-button class="buttonSdk" (click)='launchClearSessionData()' color="bluefp">Clear Session Data</ion-button>
@@ -21,6 +34,21 @@
         <ion-row class="buttonRowSdk">
             <ion-col class="buttonColSdk">
                 <ion-button class="buttonSdk" (click)='launchSetSessionId()' color="bluefp">Set Session Id</ion-button>
+            </ion-col>
+        </ion-row>
+        <ion-row class="buttonRowSdk">
+            <ion-col class="buttonColSdk">
+                <ion-button class="buttonSdk" (click)='launchSetUserId()' color="bluefp">Set User Id</ion-button>
+            </ion-col>
+        </ion-row>
+        <ion-row class="buttonRowSdk">
+            <ion-col class="buttonColSdk">
+                <ion-button class="buttonSdk" (click)='launchSetPosition()' color="bluefp">Set Position</ion-button>
+            </ion-col>
+        </ion-row>
+        <ion-row class="buttonRowSdk">
+            <ion-col class="buttonColSdk">
+                <ion-button class="buttonSdk" (click)='launchSetAutoLogoutAction()' color="bluefp">Set Auto Logout Action</ion-button>
             </ion-col>
         </ion-row>
     </ion-grid>
