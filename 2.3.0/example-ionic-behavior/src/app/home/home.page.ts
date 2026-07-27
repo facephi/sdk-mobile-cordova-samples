@@ -36,14 +36,35 @@ export class HomePage implements OnInit, AfterViewInit
 
   async ngAfterViewInit(): Promise<void>
   {
-    const ionInput = document.getElementById('textInput') as HTMLIonInputElement | null;
-    if (!ionInput) {
-      console.log('textInput not found');
-      return;
-    }
+    console.log("Behavior initialization starts.")
+    const cfg: BehaviorConfiguration = {
+      licenseKey: (this.platform.is('ios')) ? LICENSE_APIKEY_IOS : LICENSE_APIKEY_ANDROID,
+      usernameField: '',
+      passwordField: '',
+      enableSupportLogs: true
+    };
 
-    const nativeInput = await ionInput.getInputElement();
-    this.behaviorService.initializeRegisterField(nativeInput, 'text');
+    await this.behaviorService.initializeBehavior(cfg)
+    .then(
+      async (result: BehaviorResult) =>  {
+        console.log(result);
+        if (result.finishStatus === 1)
+        { 
+          this.behaviorService.initializeRecordTouchEvent();
+          const ionInput = document.getElementById('textInput') as HTMLIonInputElement | null;
+          if (!ionInput) {
+            console.log('textInput not found');
+            return;
+          }
+
+          const nativeInput = await ionInput.getInputElement();
+          this.behaviorService.initializeRegisterField(nativeInput, 'text');
+        }
+      },
+      (err: any) => console.log(err)
+    ).finally(
+      () => console.log("initSession ends.")
+    );
   }
 
   dismissKeyboard = (): void =>
