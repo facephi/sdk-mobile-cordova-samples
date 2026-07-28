@@ -72,6 +72,10 @@ export class HomePage implements OnInit, AfterViewInit
           const nativeInput = await ionInput.getInputElement();
           this.behaviorService.initializeRegisterField(nativeInput, 'text');
         }
+        if (result.finishStatus === 2)
+        { 
+          this.printError(result.errorType);
+        }
       },
       (err: any) => console.log(err)
     ).finally(
@@ -86,7 +90,13 @@ export class HomePage implements OnInit, AfterViewInit
     console.log("clearSessionData starts...");
     await this.behaviorService.clearSessionData()
     .then(
-      (result: BehaviorResult) => console.log(result), 
+      (result: BehaviorResult) => {
+        console.log(result);
+        if (result.finishStatus === 2)
+        { 
+          this.printError(result.errorType);
+        }
+      },
       (err: any) => console.log(err)
     )
     .finally(() => console.log("clearSessionData ends."));
@@ -99,7 +109,13 @@ export class HomePage implements OnInit, AfterViewInit
     console.log("setAutoLogoutAction starts...");
     await this.behaviorService.setAutoLogoutAction()
     .then(
-      (result: BehaviorResult) => console.log(result), 
+      (result: BehaviorResult) => {
+        console.log(result);
+        if (result.finishStatus === 2)
+        { 
+          this.printError(result.errorType);
+        }
+      },
       (err: any) => console.log(err)
     )
     .finally(() => console.log("setAutoLogoutAction ends."));
@@ -112,7 +128,13 @@ export class HomePage implements OnInit, AfterViewInit
     console.log("setSessionId starts...");
     await this.behaviorService.setSessionId("add sessionId...")
     .then(
-      (result: BehaviorResult) => console.log(result), 
+      (result: BehaviorResult) => {
+        console.log(result);
+        if (result.finishStatus === 2)
+        { 
+          this.printError(result.errorType);
+        }
+      },
       (err: any) => console.log(err)
     )
     .finally(() => console.log("setSessionId ends."));
@@ -125,7 +147,13 @@ export class HomePage implements OnInit, AfterViewInit
     console.log("setUserId starts...");
     await this.behaviorService.setUserId("add userId...")
     .then(
-      (result: BehaviorResult) => console.log(result), 
+      (result: BehaviorResult) => {
+        console.log(result);
+        if (result.finishStatus === 2)
+        { 
+          this.printError(result.errorType);
+        }
+      },
       (err: any) => console.log(err)
     )
     .finally(() => console.log("setUserId ends."));
@@ -139,7 +167,13 @@ export class HomePage implements OnInit, AfterViewInit
     await this.behaviorService.setPosition("add position...")
     
     .then(
-      (result: BehaviorResult) => console.log(result), 
+      (result: BehaviorResult) => {
+        console.log(result);
+        if (result.finishStatus === 2)
+        { 
+          this.printError(result.errorType);
+        }
+      },
       (err: any) => console.log(err)
     )
     .finally(() => console.log("setPosition ends."));
