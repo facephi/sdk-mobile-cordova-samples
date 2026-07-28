@@ -12,14 +12,9 @@ export class BehaviorService
 {
   constructor(public platform: Platform) { }       
 
-  initializeRecordTouchEvent = (): void => 
-  {
-    console.log("initializeRecordTouchEvent starts...");
-    facephi.plugins.wgt.behavior.recordTouchEvent();
-  };
-
   initializeRegisterField = (element: HTMLInputElement, fieldType: string): void => 
   {
+    console.log("registerField starts...");
     facephi.plugins.wgt.behavior.registerField(element, fieldType);
   };
 

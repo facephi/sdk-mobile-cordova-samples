@@ -36,7 +36,20 @@ export class HomePage implements OnInit, AfterViewInit
 
   async ngAfterViewInit(): Promise<void>
   {
-    console.log("Behavior initialization starts.")
+    this.launchBehavior();
+  }
+
+  dismissKeyboard = (): void =>
+  {
+    const active = document.activeElement as HTMLElement | null;
+    active?.blur();
+  }
+
+  launchBehavior = async () => 
+  {
+    console.log("initializeBehavior starts...");
+    
+    this.message = '';
     const cfg: BehaviorConfiguration = {
       licenseKey: (this.platform.is('ios')) ? LICENSE_APIKEY_IOS : LICENSE_APIKEY_ANDROID,
       usernameField: '',
@@ -50,7 +63,6 @@ export class HomePage implements OnInit, AfterViewInit
         console.log(result);
         if (result.finishStatus === 1)
         { 
-          this.behaviorService.initializeRecordTouchEvent();
           const ionInput = document.getElementById('textInput') as HTMLIonInputElement | null;
           if (!ionInput) {
             console.log('textInput not found');
@@ -65,32 +77,6 @@ export class HomePage implements OnInit, AfterViewInit
     ).finally(
       () => console.log("initSession ends.")
     );
-  }
-
-  dismissKeyboard = (): void =>
-  {
-    const active = document.activeElement as HTMLElement | null;
-    active?.blur();
-  }
-
-  reLaunchBehavior = async () => 
-  {
-    console.log("initializeBehavior starts...");
-    
-    this.message = '';
-    const cfg: BehaviorConfiguration = {
-      licenseKey: (this.platform.is('ios')) ? LICENSE_APIKEY_IOS : LICENSE_APIKEY_ANDROID,
-      usernameField: '',
-      passwordField: '',
-      enableSupportLogs: true
-    };
-
-    await this.behaviorService.initializeBehavior(cfg)
-    .then(
-      (result: BehaviorResult) => console.log(result), 
-      (err: any) => console.log(err)
-    )
-    .finally(() => console.log("initializeBehavior ends."));
   }
 
   launchClearSessionData = async () => 
