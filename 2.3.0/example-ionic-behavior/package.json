@@ -72,8 +72,7 @@
       "cordova-plugin-statusbar": {},
       "cordova-plugin-ionic-webview": {},
       "cordova-plugin-ionic-keyboard": {},
-      "cordova-plugin-device": {},
-      "@facephi/widget-behavior-cordova": {}
+      "cordova-plugin-device": {}
     },
     "platforms": []
   }

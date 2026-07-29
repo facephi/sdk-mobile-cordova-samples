@@ -1,0 +1,47 @@
+<ion-header>
+  <ion-toolbar color="bluefp">
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/home" text="Back"></ion-back-button>
+    </ion-buttons>
+    <ion-title class="labelTitleSelphi">Login</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="centered-content">
+  <ion-grid class="centered-grid">
+    <ion-row class="buttonRowSdk">
+      <ion-col class="buttonColSdk" style="padding-left: 15%; padding-right: 15%;">
+        <ion-input
+          id="usernameInput"
+          type="text"
+          enterkeyhint="next"
+          placeholder="Username"
+          fill="outline"
+          [(ngModel)]="username">
+        </ion-input>
+      </ion-col>
+    </ion-row>
+    <ion-row class="buttonRowSdk">
+      <ion-col class="buttonColSdk" style="padding-left: 15%; padding-right: 15%;">
+        <ion-input
+          id="passwordInput"
+          type="password"
+          enterkeyhint="done"
+          placeholder="Password"
+          fill="outline"
+          [(ngModel)]="password">
+        </ion-input>
+      </ion-col>
+    </ion-row>
+    <ion-row class="buttonRowSdk">
+      <ion-col class="buttonColSdk">
+        <ion-button class="buttonSdk" color="bluefp" (click)="onLogin()">Login</ion-button>
+      </ion-col>
+    </ion-row>
+    <ion-row class="buttonRowSdk">
+      <ion-col class="buttonColSdk">
+        <ion-button class="buttonSdk" color="bluefp" fill="outline" (click)="goHome()">Back to Home</ion-button>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>

@@ -1,4 +1,5 @@
 import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { LoadingController, Platform } from '@ionic/angular';
 import { BehaviorService } from '../services/behavior/behavior.service';
 import { BehaviorResult } from '../services/behavior/behavior.service.result';
@@ -24,7 +25,8 @@ export class HomePage implements OnInit, AfterViewInit
     public platform: Platform,
     behaviorService: BehaviorService,
     private changeDetection: ChangeDetectorRef,
-    private loadingCtrl: LoadingController) 
+    private loadingCtrl: LoadingController,
+    private router: Router) 
   {  
     this.behaviorService = behaviorService;
   }
@@ -37,6 +39,12 @@ export class HomePage implements OnInit, AfterViewInit
   async ngAfterViewInit(): Promise<void>
   {
     this.launchBehavior();
+  }
+
+  goToLogin = (): void =>
+  {
+    this.launchSetPosition("login");
+    this.router.navigateByUrl('/login');
   }
 
   dismissKeyboard = (): void =>
@@ -52,8 +60,6 @@ export class HomePage implements OnInit, AfterViewInit
     this.message = '';
     const cfg: BehaviorConfiguration = {
       licenseKey: (this.platform.is('ios')) ? LICENSE_APIKEY_IOS : LICENSE_APIKEY_ANDROID,
-      usernameField: '',
-      passwordField: '',
       enableSupportLogs: true
     };
 
@@ -61,17 +67,6 @@ export class HomePage implements OnInit, AfterViewInit
     .then(
       async (result: BehaviorResult) =>  {
         console.log(result);
-        if (result.finishStatus === 1)
-        { 
-          const ionInput = document.getElementById('textInput') as HTMLIonInputElement | null;
-          if (!ionInput) {
-            console.log('textInput not found');
-            return;
-          }
-
-          const nativeInput = await ionInput.getInputElement();
-          this.behaviorService.initializeRegisterField(nativeInput, 'text');
-        }
         if (result.finishStatus === 2)
         { 
           this.printError(result.errorType);
@@ -85,8 +80,6 @@ export class HomePage implements OnInit, AfterViewInit
 
   launchClearSessionData = async () => 
   {
-    this.message = '';
-
     console.log("clearSessionData starts...");
     await this.behaviorService.clearSessionData()
     .then(
@@ -104,8 +97,6 @@ export class HomePage implements OnInit, AfterViewInit
 
   launchSetAutoLogoutAction = async () => 
   {
-    this.message = '';
-
     console.log("setAutoLogoutAction starts...");
     await this.behaviorService.setAutoLogoutAction()
     .then(
@@ -123,8 +114,6 @@ export class HomePage implements OnInit, AfterViewInit
 
   launchSetSessionId = async () => 
   {
-    this.message = '';
-
     console.log("setSessionId starts...");
     await this.behaviorService.setSessionId("add sessionId...")
     .then(
@@ -142,8 +131,6 @@ export class HomePage implements OnInit, AfterViewInit
 
   launchSetUserId = async () => 
   {
-    this.message = '';
-
     console.log("setUserId starts...");
     await this.behaviorService.setUserId("add userId...")
     .then(
@@ -159,13 +146,10 @@ export class HomePage implements OnInit, AfterViewInit
     .finally(() => console.log("setUserId ends."));
   }
 
-  launchSetPosition = async () => 
+  launchSetPosition = async (screen: string) => 
   {
-    this.message = '';
-
     console.log("setPosition starts...");
-    await this.behaviorService.setPosition("add position...")
-    
+    await this.behaviorService.setPosition(screen)
     .then(
       (result: BehaviorResult) => {
         console.log(result);

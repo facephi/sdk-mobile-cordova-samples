@@ -1,7 +1,13 @@
 <ion-header>
     <ion-toolbar color="bluefp">
+        <ion-buttons slot="end">
+            <ion-button (click)="goToLogin()">
+                Login
+                <ion-icon slot="end" name="chevron-forward"></ion-icon>
+            </ion-button>
+        </ion-buttons>
         <ion-title class="labelTitleSelphi">
-          Sdk Mobile 360
+          Mobile 360
         </ion-title>
     </ion-toolbar>
 </ion-header>
@@ -9,19 +15,6 @@
 <ion-content class="centered-content">
     <ion-grid class="centered-grid">
         <ion-row class="buttonRowSdk">{{ message }}</ion-row>
-        <ion-row class="buttonRowSdk">
-            <ion-col class="buttonColSdk" style="padding-left: 15%; padding-right: 15%;">
-                <ion-input
-                    id="textInput"
-                    type="text"
-                    enterkeyhint="done"
-                    placeholder="Text Input type events..."
-                    fill="outline"
-                    [(ngModel)]="textInput"
-                    (keyup.enter)="dismissKeyboard()">
-                </ion-input>
-            </ion-col>
-        </ion-row>
         <ion-row class="buttonRowSdk">
             <ion-col class="buttonColSdk">
                 <ion-button class="buttonSdk" (click)='launchClearSessionData()' color="bluefp">Clear Session Data</ion-button>
@@ -44,7 +37,7 @@
         </ion-row>
         <ion-row class="buttonRowSdk">
             <ion-col class="buttonColSdk">
-                <ion-button class="buttonSdk" (click)='launchSetPosition()' color="bluefp">Set Position</ion-button>
+                <ion-button class="buttonSdk" (click)='launchSetPosition("home")' color="bluefp">Set Position</ion-button>
             </ion-col>
         </ion-row>
         <ion-row class="buttonRowSdk">
