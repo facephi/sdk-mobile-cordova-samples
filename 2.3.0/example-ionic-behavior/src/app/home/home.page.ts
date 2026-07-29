@@ -163,8 +163,8 @@ export class HomePage implements OnInit, AfterViewInit
     .finally(() => console.log("setPosition ends."));
   }
 
-  private printError(data: any)
+  private printError(msj: string)
   {
-    this.message = data['errorType'].replace(/_/g, ' ');
+    this.message = msj.replace(/_/g, ' ');
   }
 }
