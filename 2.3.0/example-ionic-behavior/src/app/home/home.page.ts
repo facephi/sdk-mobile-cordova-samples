@@ -3,7 +3,7 @@ import { Router } from '@angular/router';
 import { LoadingController, Platform } from '@ionic/angular';
 import { BehaviorService } from '../services/behavior/behavior.service';
 import { BehaviorResult } from '../services/behavior/behavior.service.result';
-import { LICENSE_APIKEY_ANDROID, LICENSE_APIKEY_IOS } from '../constants';
+import { LICENSE_APIKEY_ANDROID, LICENSE_APIKEY_IOS, USER_ID } from '../constants';
 import { BehaviorConfiguration } from '../services/behavior/behavior.config';
 
 @Component({
@@ -132,7 +132,7 @@ export class HomePage implements OnInit, AfterViewInit
   launchSetUserId = async () => 
   {
     console.log("setUserId starts...");
-    await this.behaviorService.setUserId("add userId...")
+    await this.behaviorService.setUserId(USER_ID)
     .then(
       (result: BehaviorResult) => {
         console.log(result);
