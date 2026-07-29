@@ -54,7 +54,7 @@ export class LoginPage implements AfterViewInit
 
   launchRegisterFields = async () => 
   {
-    console.log("registerFields starts...");
+    console.log("registerFields starts ...");
     
     const ionInputUser = document.getElementById('usernameInput') as HTMLIonInputElement | null;
     const ionInputPass = document.getElementById('passwordInput') as HTMLIonInputElement | null;
