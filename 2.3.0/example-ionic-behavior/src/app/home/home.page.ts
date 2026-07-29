@@ -115,7 +115,7 @@ export class HomePage implements OnInit, AfterViewInit
   launchSetSessionId = async () => 
   {
     console.log("setSessionId starts...");
-    await this.behaviorService.setSessionId("add sessionId...")
+    await this.behaviorService.setSessionId(this.behaviorService.generateUUID())
     .then(
       (result: BehaviorResult) => {
         console.log(result);

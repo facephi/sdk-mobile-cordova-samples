@@ -12,6 +12,10 @@ export class BehaviorService
 {
   constructor(public platform: Platform) { }       
 
+  generateUUID = (): string => {
+    return facephi.plugins.wgt.behavior.utils.generateUUID();
+  };
+
   initializeRegisterField = (element: HTMLInputElement, fieldType: string): void => 
   {
     console.log("registerField starts...");
