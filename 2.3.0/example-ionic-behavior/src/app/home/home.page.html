@@ -14,7 +14,9 @@
 
 <ion-content class="centered-content">
     <ion-grid class="centered-grid">
-        <ion-row class="buttonRowSdk">{{ message }}</ion-row>
+        <ion-row class="messageRowSdk">
+            <ion-col class="buttonColSdk">{{ message }}</ion-col>
+        </ion-row>
         <ion-row class="buttonRowSdk">
             <ion-col class="buttonColSdk">
                 <ion-button class="buttonSdk" (click)='launchClearSessionData()' color="bluefp">Clear Session Data</ion-button>
@@ -23,6 +25,11 @@
         <ion-row class="buttonRowSdk">
             <ion-col class="buttonColSdk">
                 <ion-button class="buttonSdk" (click)='launchBehavior()' color="bluefp">Re Launch Behavior</ion-button>
+            </ion-col>
+        </ion-row>
+        <ion-row class="buttonRowSdk">
+            <ion-col class="buttonColSdk">
+                <ion-button class="buttonSdk" (click)='launchCheckInitialization()' color="bluefp">Check Initialization</ion-button>
             </ion-col>
         </ion-row>
         <ion-row class="buttonRowSdk">

@@ -71,10 +71,27 @@ export class HomePage implements OnInit, AfterViewInit
         { 
           this.printError(result.errorType);
         }
+        if (result.finishStatus === 1)
+        {
+          this.launchCheckInitialization()
+        }
       },
       (err: any) => console.log(err)
     ).finally(
       () => console.log("initSession ends.")
+    );
+  }
+
+  launchCheckInitialization = async () => 
+  {
+    this.behaviorService.checkInitialization()
+    .then(
+      (result: BehaviorResult) => {
+        console.log(result);
+      },
+      (err: any) => console.log(err)
+    ).finally(
+      () => console.log("checkInitialization ends.")
     );
   }
 

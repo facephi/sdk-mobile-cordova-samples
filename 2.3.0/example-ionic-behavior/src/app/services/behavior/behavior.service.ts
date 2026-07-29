@@ -27,6 +27,11 @@ export class BehaviorService
     return facephi.plugins.wgt.behavior.initialize(value);
   };
 
+  checkInitialization = async (): Promise<BehaviorResult> => 
+  {
+    return facephi.plugins.wgt.behavior.checkInitialization();
+  };
+
   setUserId = async (value: string): Promise<BehaviorResult> => 
   {
     return facephi.plugins.wgt.behavior.setUserId(value);
