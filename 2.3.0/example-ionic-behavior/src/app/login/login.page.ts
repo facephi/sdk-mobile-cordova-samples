@@ -35,6 +35,23 @@ export class LoginPage implements AfterViewInit
     console.log('login', { username: this.username, password: this.password });
   }
 
+  launchSetAutoLogoutAction = async () => 
+  {
+    console.log("setAutoLogoutAction starts...");
+    await this.behaviorService.setAutoLogoutAction()
+    .then(
+      (result: BehaviorResult) => {
+        console.log(result);
+        if (result.finishStatus === 2)
+        { 
+          console.log(result.errorType);
+        }
+      },
+      (err: any) => console.log(err)
+    )
+    .finally(() => console.log("setAutoLogoutAction ends."));
+  }
+
   launchSetPosition = async (screen: string) => 
   {
     console.log("setPosition starts...");
