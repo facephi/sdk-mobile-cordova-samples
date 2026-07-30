@@ -44,7 +44,8 @@ export class HomePage implements OnInit, AfterViewInit
 
   async ngAfterViewInit(): Promise<void>
   {
-    this.launchInitialize();
+    await new Promise(resolve => setTimeout(resolve, 500));
+    await this.launchInitialize();
   }
 
   goToLogin = (): void =>
