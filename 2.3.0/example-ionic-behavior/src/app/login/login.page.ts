@@ -27,7 +27,7 @@ export class LoginPage implements AfterViewInit
   }
 
   goHome = (): void => {
-    this.launchSetPosition("home");
+    this.launchSetPosition("Dashboard");
     this.router.navigateByUrl('/home');
   }
 

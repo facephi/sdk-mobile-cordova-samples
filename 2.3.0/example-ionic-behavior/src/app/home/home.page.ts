@@ -50,7 +50,7 @@ export class HomePage implements OnInit, AfterViewInit
 
   goToLogin = (): void =>
   {
-    this.launchSetPosition("login");
+    this.launchSetPosition("Login");
     this.router.navigateByUrl('/login');
   }
 
@@ -172,7 +172,10 @@ export class HomePage implements OnInit, AfterViewInit
   launchSetUserId = async () => 
   {
     console.log("setUserId starts...");
-    await this.behaviorService.setUserId(USER_ID)
+    //const encryptedUserId = await Encryptor.encryptUserId(USER_ID)
+    const encryptedUserId   = USER_ID
+    console.log("encryptedUserId", encryptedUserId);
+    await this.behaviorService.setUserId(encryptedUserId)
     .then(
       (result: BehaviorResult) => {
         console.log(result);
