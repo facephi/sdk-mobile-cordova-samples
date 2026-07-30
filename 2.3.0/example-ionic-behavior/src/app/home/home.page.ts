@@ -5,6 +5,7 @@ import { BehaviorService } from '../services/behavior/behavior.service';
 import { BehaviorResult } from '../services/behavior/behavior.service.result';
 import { LICENSE_APIKEY_ANDROID, LICENSE_APIKEY_IOS, USER_ID } from '../constants';
 import { BehaviorConfiguration } from '../services/behavior/behavior.config';
+import { Fip360Service } from '../api/api-rest/fip360.service';
 
 @Component({
     selector: 'app-home',
@@ -15,30 +16,35 @@ import { BehaviorConfiguration } from '../services/behavior/behavior.config';
 })
 export class HomePage implements OnInit, AfterViewInit
 {
+  fip360Service: Fip360Service;
   behaviorService: BehaviorService;
+  sessionId?: string | null         = null;
   message: string                   = "";
   textInput: string                 = "";
   showError: boolean                = false;
   isDocumentDataSheetOpen: boolean  = false;
 
   constructor(
-    public platform: Platform,
     behaviorService: BehaviorService,
+    fip360Service: Fip360Service,
+    public platform: Platform,
     private changeDetection: ChangeDetectorRef,
     private loadingCtrl: LoadingController,
     private router: Router) 
   {  
-    this.behaviorService = behaviorService;
+    this.behaviorService  = behaviorService;
+    this.fip360Service    = fip360Service;
   }
 
   ngOnInit(): void 
   {
     console.log("HomePage ngOnInit");
+    this.launchGetSessionId();
   }
 
   async ngAfterViewInit(): Promise<void>
   {
-    this.launchBehavior();
+    this.launchInitialize();
   }
 
   goToLogin = (): void =>
@@ -47,13 +53,29 @@ export class HomePage implements OnInit, AfterViewInit
     this.router.navigateByUrl('/login');
   }
 
-  dismissKeyboard = (): void =>
+  launchGetSessionId = async () => 
   {
-    const active = document.activeElement as HTMLElement | null;
-    active?.blur();
-  }
+    console.log("getSessionId starts...");
 
-  launchBehavior = async () => 
+    this.fip360Service.getSessionId()
+    .subscribe({
+      next: (data: any) => {
+        console.log(data);
+        if (data && data.sessionId)
+        {
+          this.sessionId = data.sessionId;
+        }
+      },
+      error: (err) => {
+        console.error(err);
+      },
+      complete: () => {
+        console.log("getSessionId ends.");
+      }
+    });
+  } 
+
+  launchInitialize = async () => 
   {
     console.log("initializeBehavior starts...");
     
@@ -63,17 +85,13 @@ export class HomePage implements OnInit, AfterViewInit
       enableSupportLogs: true
     };
 
-    await this.behaviorService.initializeBehavior(cfg)
+    await this.behaviorService.initialize(cfg)
     .then(
       async (result: BehaviorResult) =>  {
         console.log(result);
         if (result.finishStatus === 2)
         { 
           this.printError(result.errorType);
-        }
-        if (result.finishStatus === 1)
-        {
-          this.launchCheckInitialization()
         }
       },
       (err: any) => console.log(err)
@@ -106,6 +124,10 @@ export class HomePage implements OnInit, AfterViewInit
         { 
           this.printError(result.errorType);
         }
+        if (result.finishStatus === 1)
+        { 
+          this.sessionId = null;
+        }
       },
       (err: any) => console.log(err)
     )
@@ -132,7 +154,7 @@ export class HomePage implements OnInit, AfterViewInit
   launchSetSessionId = async () => 
   {
     console.log("setSessionId starts...");
-    await this.behaviorService.setSessionId(this.behaviorService.generateUUID())
+    await this.behaviorService.setSessionId(this.sessionId ? this.sessionId : this.behaviorService.generateUUID())
     .then(
       (result: BehaviorResult) => {
         console.log(result);

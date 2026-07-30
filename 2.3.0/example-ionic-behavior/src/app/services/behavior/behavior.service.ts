@@ -22,7 +22,7 @@ export class BehaviorService
     facephi.plugins.wgt.behavior.registerField(element, fieldType);
   };
 
-  initializeBehavior = async (value: BehaviorConfiguration): Promise<BehaviorResult> => 
+  initialize = async (value: BehaviorConfiguration): Promise<BehaviorResult> => 
   {
     return facephi.plugins.wgt.behavior.initialize(value);
   };
