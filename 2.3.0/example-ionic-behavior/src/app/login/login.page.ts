@@ -26,30 +26,18 @@ export class LoginPage implements AfterViewInit
     this.launchRegisterFields();
   }
 
-  goHome = (): void => {
+  goDashboard = (): void => {
     this.launchSetPosition("Dashboard");
+    this.router.navigateByUrl('/dashboard');
+  }
+
+  goHome = (): void => {
+    this.launchSetPosition("Home");
     this.router.navigateByUrl('/home');
   }
 
   onLogin = (): void => {
     console.log('login', { username: this.username, password: this.password });
-  }
-
-  launchSetAutoLogoutAction = async () => 
-  {
-    console.log("setAutoLogoutAction starts...");
-    await this.behaviorService.setAutoLogoutAction()
-    .then(
-      (result: BehaviorResult) => {
-        console.log(result);
-        if (result.finishStatus === 2)
-        { 
-          console.log(result.errorType);
-        }
-      },
-      (err: any) => console.log(err)
-    )
-    .finally(() => console.log("setAutoLogoutAction ends."));
   }
 
   launchSetPosition = async (screen: string) => 

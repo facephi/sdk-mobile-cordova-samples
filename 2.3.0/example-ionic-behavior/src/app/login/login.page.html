@@ -1,7 +1,16 @@
 <ion-header>
   <ion-toolbar color="bluefp">
     <ion-buttons slot="start">
-      <ion-back-button defaultHref="/home" text="Back"></ion-back-button>
+      <ion-button (click)="goHome()">
+        Home
+        <ion-icon slot="start" name="chevron-back"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-buttons slot="end">
+      <ion-button (click)="goDashboard()">
+          Dashboard
+          <ion-icon slot="end" name="chevron-forward"></ion-icon>
+      </ion-button>
     </ion-buttons>
     <ion-title class="labelTitleSelphi">Login</ion-title>
   </ion-toolbar>
@@ -35,17 +44,7 @@
     </ion-row>
     <ion-row class="buttonRowSdk">
       <ion-col class="buttonColSdk">
-        <ion-button class="buttonSdk" color="bluefp" (click)="launchSetAutoLogoutAction()">Set Auto Logout Action</ion-button>
-      </ion-col>
-    </ion-row>
-    <ion-row class="buttonRowSdk">
-      <ion-col class="buttonColSdk">
         <ion-button class="buttonSdk" color="bluefp" (click)="onLogin()">Login</ion-button>
-      </ion-col>
-    </ion-row>
-    <ion-row class="buttonRowSdk">
-      <ion-col class="buttonColSdk">
-        <ion-button class="buttonSdk" color="bluefp" (click)="launchSetPosition('Account')">Set Position Account</ion-button>
       </ion-col>
     </ion-row>
     <ion-row class="buttonRowSdk">

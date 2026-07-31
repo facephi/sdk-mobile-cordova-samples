@@ -6,6 +6,7 @@ import { BehaviorResult } from '../services/behavior/behavior.service.result';
 import { LICENSE_APIKEY_ANDROID, LICENSE_APIKEY_IOS, USER_ID } from '../constants';
 import { BehaviorConfiguration } from '../services/behavior/behavior.config';
 import { Fip360Service } from '../api/api-rest/fip360.service';
+import { Encryptor } from '../encryptor';
 
 @Component({
     selector: 'app-home',
@@ -101,6 +102,19 @@ export class HomePage implements OnInit, AfterViewInit
     );
   }
 
+  launchDestroy = async () => 
+  {
+    this.behaviorService.destroy()
+    .then(
+      (result: BehaviorResult) => {
+        console.log(result);
+      },
+      (err: any) => console.log(err)
+    ).finally(
+      () => console.log("launchDestroy ends.")
+    );
+  }
+
   launchCheckInitialization = async () => 
   {
     this.behaviorService.checkInitialization()
@@ -117,6 +131,7 @@ export class HomePage implements OnInit, AfterViewInit
   launchClearSessionData = async () => 
   {
     console.log("clearSessionData starts...");
+    this.printError("");
     await this.behaviorService.clearSessionData()
     .then(
       (result: BehaviorResult) => {
@@ -209,5 +224,6 @@ export class HomePage implements OnInit, AfterViewInit
   private printError(msj: string)
   {
     this.message = msj.replace(/_/g, ' ');
+    this.changeDetection.detectChanges();
   }
 }

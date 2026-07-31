@@ -14,9 +14,9 @@ export class Encryptor
         const plaintext =
             `${USER_ID_VALUE_NAMESPACE}:${normalized}`;
 
-        const key = await this.generateKey();
-        const iv = await this.deterministicIv(plaintext);
-        const ciphertext = await this.encryptData(
+        const key           = await this.generateKey();
+        const iv            = await this.deterministicIv(plaintext);
+        const ciphertext    = await this.encryptData(
             key,
             plaintext,
             iv

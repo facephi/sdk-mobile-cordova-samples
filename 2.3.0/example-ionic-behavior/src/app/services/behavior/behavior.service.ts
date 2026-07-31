@@ -27,6 +27,11 @@ export class BehaviorService
     return facephi.plugins.wgt.behavior.initialize(value);
   };
 
+  destroy = async (): Promise<BehaviorResult> => 
+  {
+    return facephi.plugins.wgt.behavior.destroy();
+  };
+
   checkInitialization = async (): Promise<BehaviorResult> => 
   {
     return facephi.plugins.wgt.behavior.checkInitialization();
