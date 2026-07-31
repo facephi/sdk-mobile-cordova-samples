@@ -99,7 +99,8 @@ export class HomePage implements OnInit, AfterViewInit
         }
         if (result.finishStatus === 1)
         { 
-          this.launchSetPosition("Home")
+          await this.launchSetPosition("Home")
+          await this.launchSetAutoLogoutAction()
         }
       },
       (err: any) => console.log(err)
