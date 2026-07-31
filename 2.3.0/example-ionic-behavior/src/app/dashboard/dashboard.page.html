@@ -1,0 +1,26 @@
+<ion-header>
+  <ion-toolbar color="bluefp">
+    <ion-buttons slot="start">
+      <ion-button (click)="goLogin()">
+        Login
+        <ion-icon slot="start" name="chevron-back"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-title class="labelTitleSelphi">Dashboard</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="centered-content">
+  <ion-grid class="centered-grid">
+    <ion-row class="buttonRowSdk">
+      <ion-col class="buttonColSdk">
+        <ion-button class="buttonSdk" color="bluefp" (click)="goLogin()">Back to Login</ion-button>
+      </ion-col>
+    </ion-row>
+    <ion-row class="buttonRowSdk">
+      <ion-col class="buttonColSdk">
+        <ion-button class="buttonSdk" color="bluefp" fill="outline" (click)="goHome()">Go to Home</ion-button>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>

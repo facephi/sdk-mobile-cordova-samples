@@ -71,8 +71,10 @@ export class HomePage implements OnInit, AfterViewInit
       error: (err) => {
         console.error(err);
       },
-      complete: () => {
+      complete: () => 
+      {
         console.log("getSessionId ends.");
+        this.launchSetSessionId();
       }
     });
   } 
@@ -94,6 +96,10 @@ export class HomePage implements OnInit, AfterViewInit
         if (result.finishStatus === 2)
         { 
           this.printError(result.errorType);
+        }
+        if (result.finishStatus === 1)
+        { 
+          this.launchSetPosition("Home")
         }
       },
       (err: any) => console.log(err)
