@@ -41,7 +41,12 @@
     src: url('./assets/fonts/circular-std-bold.ttf'); //mine
 }
 
-/* Cordova: StatusBar no overlay → evita toolbar con altura doble por safe-area */
-ion-header ion-toolbar:first-of-type {
+/*
+ * Cordova StatusBar:
+ * - Android (md): el WebView ya no debería overlay, pero a veces --ion-safe-area-top
+ *   se suma igual (p.ej. Pixel) → toolbar de doble altura. Forzar padding-top: 0.
+ * - iOS: no forzar 0; hace falta el safe-area para no tapar batería/hora/notch.
+ */
+.md ion-header ion-toolbar:first-of-type {
   padding-top: 0;
 }
