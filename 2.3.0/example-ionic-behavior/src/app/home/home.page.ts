@@ -8,6 +8,8 @@ import { BehaviorConfiguration } from '../services/behavior/behavior.config';
 import { Fip360Service } from '../api/api-rest/fip360.service';
 import { Encryptor } from '../encryptor';
 
+declare let facephi: any;
+
 @Component({
     selector: 'app-home',
     templateUrl: 'home.page.html',
@@ -41,12 +43,29 @@ export class HomePage implements OnInit, AfterViewInit
   {
     console.log("HomePage ngOnInit");
     this.launchGetSessionId();
+    this.initListeners();
   }
 
   async ngAfterViewInit(): Promise<void>
   {
     await new Promise(resolve => setTimeout(resolve, 500));
     await this.launchInitialize();
+  }
+
+  initListeners(): void 
+  {
+    document.addEventListener('deviceready', () => 
+    {
+      facephi.plugins.wgt.behavior.startListeningBehaviorEvents(
+        (event: BehaviorResult) => {
+          console.log('WGT_BEHAVIOR_EVENTS:', event)
+        }
+      ).catch((error: any) => {
+        console.error('Error starting to listen to behavior events:', error);
+      }).finally(() => {
+        console.log("startListeningBehaviorEvents ends.");
+      });
+    });
   }
 
   goToLogin = (): void =>
