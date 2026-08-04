@@ -89,7 +89,7 @@ function showMessageUI(message)
     $("#messageResult").html(message).removeClass("blink").css("color", "#ff0000").css("text-align", "center").show();
 };
 
-function getErrorStringToShow(data) 
+function getErrorStringToShow(data)
 {
     if (data['errorType'] === SdkErrorType.InitFlow) // Unknown Error
     {

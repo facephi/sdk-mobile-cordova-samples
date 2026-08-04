@@ -9,10 +9,9 @@
     <allow-intent href="http://*/*" />
     <allow-intent href="https://*/*" />
     
-    <dependency id="cordova-plugin-cocoapod-support"/>
+    <!--<dependency id="cordova-plugin-cocoapod-support"/>-->
     <dependency id="cordova-plugin-statusbar"/>
     <dependency id="cordova-plugin-advanced-http"/>
-    <dependency id="cordova-plugin-broadcaster"/>
     
     <platform name="android">
         <preference name="GradlePluginKotlinVersion" value="2.2.0" />
