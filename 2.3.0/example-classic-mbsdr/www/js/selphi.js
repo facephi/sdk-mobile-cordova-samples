@@ -17,9 +17,7 @@ function callSelphi()
         console.log("A process is running...");
         return false;
     }
-    if (!isStartingSDK) {
-        isStartingSDK = true;
-    }
+    isStartingSDK = true;
 
     selphiResponse  = null;
     var config      = new SdkSelphiConfig();

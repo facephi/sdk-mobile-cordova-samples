@@ -17,9 +17,7 @@ function callSelphID()
         console.log("A process is running...");
         return false;
     }
-    if (!isStartingSDK) {
-        isStartingSDK = true;
-    }
+    isStartingSDK = true;
 
     var config_id = new SdkSelphIDConfig();
     

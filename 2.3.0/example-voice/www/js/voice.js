@@ -14,9 +14,7 @@ function callVoice()
         console.log("A process is running...");
         return false;
     }
-    if (!isStartingSDK) {
-        isStartingSDK = true;
-    }
+    isStartingSDK = true;
 
     var config = new SdkVoiceConfig();
     config.setPhrases("Hola Facephi Component|Hello world|Desarrollo del componente Voice")

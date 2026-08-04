@@ -14,9 +14,7 @@ function callPhingers()
         console.log("A process is running...");
         return false;
     }
-    if (!isStartingSDK) {
-        isStartingSDK = true;
-    }
+    isStartingSDK = true;
 
     phingersResponse    = null;
     var config          = new SdkPhingersConfig();

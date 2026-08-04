@@ -39,9 +39,7 @@ function callInitSession()
         console.log("A process is running...");
         return false;
     }
-    if (!isStartingSDK) {
-        isStartingSDK = true;
-    }
+    isStartingSDK = true;
 
     const lic       = window.cordova.platformId.toUpperCase() == "IOS" ? LICENSEIOS_NEW : LICENSEANDROID_NEW
     const apiKey    = window.cordova.platformId.toUpperCase() == "IOS" ? LICENSE_APIKEY_IOS : LICENSE_APIKEY_ANDROID
@@ -84,9 +82,7 @@ function callInitOperation()
         console.log("A process is running...");
         return false;
     }
-    if (!isStartingSDK) {
-        isStartingSDK = true;
-    }
+    isStartingSDK = true;
 
     facephi.plugins.sdkcore.launchInitOperation({
         "customerId": "cordoba@facephi.com",

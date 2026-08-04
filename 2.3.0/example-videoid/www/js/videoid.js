@@ -14,9 +14,7 @@ function callVideoId()
         console.log("A process is running...");
         return false;
     }
-    if (!isStartingSDK) {
-        isStartingSDK = true;
-    }
+    isStartingSDK = true;
 
     var config = new SdkVideoIdConfig();
     config.setMode(facephi.plugins.sdkvideoid.mode.SdkVideoIdMode.face_document_front)
