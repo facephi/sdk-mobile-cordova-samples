@@ -1,9 +1,4 @@
-var data        = null;
-var listener    = function(e)
-{
-  //console.log("core.flow received!: " + JSON.stringify(e));
-  console.log("core.flow received!: ", e);
-}
+var data = null; // Data needed for the next steps api rest call.
 
 function callCloseSession()
 {
@@ -55,7 +50,7 @@ function callInitSession()
             console.log(result);
             if (parseInt(result['finishStatus']) == SdkMobileFinishStatus.Error)
             {
-                getErrorStringToShow(result);
+                showErrorUI(result['errorType']);
             }
         },
         (err) => console.log(err),
@@ -94,7 +89,7 @@ function callInitOperation()
             console.log(result);
             if (parseInt(result['finishStatus']) == SdkMobileFinishStatus.Error)
             {
-                getErrorStringToShow(result);
+                showErrorUI(result['errorType']);
             }
         },
         (err) => console.log(err),

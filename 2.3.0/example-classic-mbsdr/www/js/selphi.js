@@ -31,7 +31,7 @@ function callSelphi()
     facephi.plugins.sdkselphi.launchSelphi(config)
     .then(
         (result) => onSuccessSelphiExtraction(result),
-        (err) => onErrorSelphiExtraction(err),
+        (err) => showErrorUI(err),
     )
     .finally (() =>
     {
@@ -50,23 +50,18 @@ const onSuccessSelphiExtraction = (result) =>
 {
     console.log('Enter to onSuccessWidgetExtraction');
     // Here must return the value of processing Widget if is a success.
-    if (result != null && result)
+
+    if (result == null || result == undefined) {
+        showErrorUI(fphi_str_unknown_error);
+    }
+    else
     {
-        var data = (result);
-
-        if (typeof data['finishStatus'] === "undefined") {
-            showErrorUI(fphi_str_unknown_error);
-            return;
-        }
-
-        switch (parseInt(data['finishStatus']))
+        switch (parseInt(result['finishStatus']))
         {
             case SdkMobileFinishStatus.Ok: // OK
-                selphiResponse = data;
+                selphiResponse = result;
                 var rowWidth = (window.screen.availWidth).toString() + 'px';
-                // The "bestImage" is the image that must be used for the Liveness Passive process. It is formatted in stringBase64
-                //showMessageUI('BestImage Length: ' + data.bestImage.length); // data['bestImage'].length;
-                document.getElementById("bestImg").src = 'data:image/jpeg;base64,' + data.bestImage;
+                document.getElementById("bestImg").src = 'data:image/jpeg;base64,' + result.bestImage;
                 $("#bestImg").css("height", "95%").css("width", "100%");
                 //$("#authenticationResponse").css("width", rowWidth).show();
                 $("#authenticationResponse").show();
@@ -75,35 +70,11 @@ const onSuccessSelphiExtraction = (result) =>
                 break;
 
             case SdkMobileFinishStatus.Error: // Error
-                if (data['errorType'])
-                {
-                    getErrorStringToShow(data);
-                }
-                else
-                {
-                    showErrorUI(fphi_str_unknown_error);
-                }
+                showErrorUI(result['errorType']);
                 break;
 
             default:
                 showErrorUI(fphi_str_unknown_error);
         }
-    }
-    else {
-        showErrorUI(fphi_str_unknown_error);
-    }
-};
-
-/**
- * Event launched when Widget Plugin launches an exception/error.
- * @method onErrorWidgetExtracion
- * @param String result The result widget object
- */
-const onErrorSelphiExtraction = (result) =>
-{
-    console.log('Enter to onErrorSelphiExtraction', result);
-    if (result != null && result)
-    {
-        showErrorUI(result);
     }
 };
