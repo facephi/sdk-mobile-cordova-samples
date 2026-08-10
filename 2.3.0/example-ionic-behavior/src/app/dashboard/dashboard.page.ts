@@ -1,7 +1,9 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { BehaviorService } from '../services/behavior/behavior.service';
 import { BehaviorResult } from '../services/behavior/behavior.service.result';
+
+declare let facephi: any;
 
 @Component({
   selector: 'app-dashboard',
@@ -11,34 +13,56 @@ import { BehaviorResult } from '../services/behavior/behavior.service.result';
   standalone: false
 })
 export class DashboardPage {
-  behaviorService: BehaviorService;
+  message = '';
+  showError = false;
 
-  constructor(private router: Router, behaviorService: BehaviorService) {
-    this.behaviorService = behaviorService;
+  constructor(
+    private router: Router,
+    public behaviorService: BehaviorService,
+    private changeDetection: ChangeDetectorRef
+  ) {}
+
+  get user(): string {
+    return this.behaviorService.userId;
   }
 
-  goLogin = (): void => {
-    this.launchSetPosition('Login');
-    this.router.navigateByUrl('/login');
+  private setError(message: string): void {
+    this.message = message;
+    this.showError = true;
+    this.changeDetection.markForCheck();
   }
 
-  goHome = (): void => {
-    this.launchSetPosition('Home');
+  private get finishError(): number {
+    return facephi?.plugins?.wgt?.behavior?.finishStatus?.Error ?? 2;
+  }
+
+  launchSetPosition = async (position: string): Promise<void> => {
+    console.log('Starting launchSetPosition...');
+    this.showError = false;
+
+    try {
+      const result: BehaviorResult = await this.behaviorService.setPosition(position);
+      console.log('setPosition result', result);
+
+      if (result.finishStatus === this.finishError) {
+        this.setError(result.errorMessage || result.errorType || 'Unknown error');
+      }
+    } catch (error) {
+      console.log('Error setPosition', error);
+      this.setError(String(error));
+    } finally {
+      console.log('End setPosition...');
+    }
+  };
+
+  goToHome = async (): Promise<void> => {
+    await this.launchSetPosition('Home');
     this.router.navigateByUrl('/home');
-  }
+  };
 
-  launchSetPosition = async (screen: string) => {
-    console.log('setPosition starts...');
-    await this.behaviorService.setPosition(screen)
-      .then(
-        (result: BehaviorResult) => {
-          console.log(result);
-          if (result.finishStatus === 2) {
-            console.log(result.errorType);
-          }
-        },
-        (err: any) => console.log(err)
-      )
-      .finally(() => console.log('setPosition ends.'));
-  }
+  onLogout = async (): Promise<void> => {
+    this.behaviorService.userId = '';
+    await this.launchSetPosition('Login');
+    this.router.navigateByUrl('/login');
+  };
 }

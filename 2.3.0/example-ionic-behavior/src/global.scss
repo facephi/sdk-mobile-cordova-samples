@@ -50,3 +50,74 @@
 .md ion-header ion-toolbar:first-of-type {
   padding-top: 0;
 }
+
+/* Shared Behavior demo screens (aligned with Capacitor demo) */
+.centered-content::part(scroll) {
+  min-height: 100%;
+}
+
+.centered-grid {
+  width: 100%;
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.buttonRowSdk {
+  height: auto;
+  margin-top: 2%;
+}
+
+.messageRowSdk,
+.titleRow {
+  height: auto;
+  justify-content: center;
+  text-align: center;
+}
+
+.buttonColSdk {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin: 1%;
+  align-items: center;
+}
+
+.screenTitle {
+  margin: 0;
+  font-size: 1.8rem;
+  font-family: 'Circular Std Bold' !important;
+}
+
+.screenSubtitle {
+  margin: 4px 0 16px;
+  font-size: 0.95rem;
+  color: var(--ion-color-medium);
+}
+
+.errorLabel {
+  color: crimson;
+  text-align: center;
+  font-size: 1rem;
+}
+
+.buttonSdk {
+  border-color: var(--ion-color-bluefp);
+  --border-radius: 5px;
+  width: 70%;
+  font-size: 1.1em;
+  text-transform: capitalize;
+  font-family: 'Circular Std Bold' !important;
+}
+
+.labelTitleSelphi {
+  width: 100%;
+  text-align: center;
+  font-size: 1.6em;
+  font-family: 'Circular Std Bold' !important;
+}
+
+ion-input {
+  width: 100%;
+}

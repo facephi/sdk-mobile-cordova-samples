@@ -1,35 +1,40 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { HTTP } from '@awesome-cordova-plugins/http/ngx'
+import { firstValueFrom } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class Fip360Service {
-
-  constructor( private http: HttpClient, private http2: HTTP ) { }
- 
-  url: string   = '';
-  headers: any  = {
-    'Access-Control-Allow-Origin': '*',
-    'Access-Control-Allow-Credentials': 'true',
-    'Access-Control-Allow-Methods': 'GET,HEAD,OPTIONS,POST,PUT',
-    'Access-Control-Allow-Headers': 'Access-Control-Allow-Headers, Origin,Accept, X-Requested-With, Content-Type, Access-Control-Request-Method, Access-Control-Request-Headers',
-    //'Content-type': 'application/json',
-    //'Access-Control-Allow-Headers': 'Content-Type',
-    //'Access-Control-Request-Headers': 'X-Custom-Header',
-    //'Access-Control-Allow-Methods': 'POST',
-    //'Access-Control-Allow-Origin' : '*',
-    'client-id' : '', 
-    'token-app' : '',
-    'x-api-key' : '',
-    //'app-name'  : ''  
+  private readonly url = 'https://xxx.xxx.com';
+  private readonly headers = {
+    Accept: 'application/json',
+    'Content-Type': 'application/json'
   };
 
-  getSessionId() 
-  {
-    return this.http.post<any[]>(
-      this.url + '/api/init', {}, this.headers,
-    );
+  constructor(private http: HttpClient) {}
+
+  getUUID(): string {
+    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, (c) => {
+      const r = (Math.random() * 16) | 0;
+      const v = c === 'x' ? r : (r & 0x3) | 0x8;
+      return v.toString(16);
+    });
+  }
+
+  async getSessionId(
+    method: string = '/api/init',
+    bodyParams: Record<string, unknown> = {}
+  ): Promise<{ sessionId?: string } | null> {
+    try {
+      return await firstValueFrom(
+        this.http.post<{ sessionId?: string }>(this.url + method, bodyParams, {
+          headers: this.headers
+        })
+      );
+    } catch (error) {
+      console.error('getSessionId error', error);
+      return null;
+    }
   }
 }

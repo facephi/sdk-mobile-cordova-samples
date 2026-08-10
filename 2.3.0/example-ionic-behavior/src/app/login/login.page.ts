@@ -1,7 +1,11 @@
-import { AfterViewInit, ChangeDetectionStrategy, Component } from '@angular/core';
+import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { Platform } from '@ionic/angular';
+import { Fip360Service } from '../api/api-rest/fip360.service';
 import { BehaviorService } from '../services/behavior/behavior.service';
 import { BehaviorResult } from '../services/behavior/behavior.service.result';
+
+declare let facephi: any;
 
 @Component({
   selector: 'app-login',
@@ -10,74 +14,199 @@ import { BehaviorResult } from '../services/behavior/behavior.service.result';
   changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: false
 })
-export class LoginPage implements AfterViewInit
-{
-  username: string = '';
-  password: string = '';
+export class LoginPage implements OnInit, AfterViewInit {
+  user = '';
+  message = '';
+  showError = false;
+  localError = '';
+  private fieldsRegistered = false;
 
-  behaviorService: BehaviorService;
+  constructor(
+    private router: Router,
+    public behaviorService: BehaviorService,
+    private fip360Service: Fip360Service,
+    private platform: Platform,
+    private changeDetection: ChangeDetectorRef
+  ) {}
 
-  constructor(private router: Router, behaviorService: BehaviorService) {
-    this.behaviorService = behaviorService;
+  get session(): string {
+    return this.behaviorService.sessionId;
   }
 
-  ngAfterViewInit(): void 
-  {
-    this.launchRegisterFields();
+  async ngOnInit(): Promise<void> {
+    await this.platform.ready();
+    this.behaviorService.addEventsListener((response: any) => {
+      console.log('WGT_BEHAVIOR_EVENTS', response);
+    });
+
+    if (!this.behaviorService.sessionId) {
+      await this.launchInitialize();
+    }
   }
 
-  goDashboard = (): void => {
-    this.launchSetPosition("Dashboard");
-    this.router.navigateByUrl('/dashboard');
+  async ngAfterViewInit(): Promise<void> {
+    await this.registerTypingField();
   }
 
-  goHome = (): void => {
-    this.launchSetPosition("Home");
-    this.router.navigateByUrl('/home');
+  private setError(message: string): void {
+    this.message = message;
+    this.showError = true;
+    this.changeDetection.markForCheck();
   }
 
-  onLogin = (): void => {
-    console.log('login', { username: this.username, password: this.password });
+  private clearError(): void {
+    this.showError = false;
+    this.changeDetection.markForCheck();
   }
 
-  launchSetPosition = async (screen: string) => 
-  {
-    console.log("setPosition starts...");
-    await this.behaviorService.setPosition(screen)
-    .then(
-      (result: BehaviorResult) => {
-        console.log(result);
-        if (result.finishStatus === 2)
-        { 
-          console.log(result.errorType);
-        }
-      },
-      (err: any) => console.log(err)
-    )
-    .finally(() => console.log("setPosition ends."));
+  private get finishOk(): number {
+    return facephi?.plugins?.wgt?.behavior?.finishStatus?.Ok ?? 1;
   }
 
-  launchRegisterFields = async () => 
-  {
-    console.log("registerFields starts ...");
-    
-    const ionInputUser = document.getElementById('usernameInput') as HTMLIonInputElement | null;
-    const ionInputPass = document.getElementById('passwordInput') as HTMLIonInputElement | null;
-    if (!ionInputUser) {
-      console.log('usernameInput not found');
+  private get finishError(): number {
+    return facephi?.plugins?.wgt?.behavior?.finishStatus?.Error ?? 2;
+  }
+
+  launchInitialize = async (): Promise<void> => {
+    console.log('Starting launchInitialize...');
+    this.clearError();
+
+    try {
+      const result = await this.behaviorService.initialize();
+      console.log('initialize result', result);
+
+      if (result.finishStatus === this.finishOk) {
+        await this.launchSetSessionId();
+        await this.launchSetAutoLogoutAction();
+        await this.launchSetPosition('Login');
+      } else if (result.finishStatus === this.finishError) {
+        this.setError(result.errorMessage || result.errorType || 'Unknown error');
+      }
+    } catch (error) {
+      console.log('Error initialize', error);
+      this.setError(String(error));
+    } finally {
+      console.log('End initialize...');
+      this.changeDetection.markForCheck();
+    }
+  };
+
+  launchClearSession = async (): Promise<void> => {
+    console.log('Starting launchClearSession...');
+    try {
+      const result = await this.behaviorService.clearSessionData();
+      console.log('clearSessionData result', result);
+      this.behaviorService.sessionId = '';
+    } catch (error) {
+      console.log('Error launchClearSession', error);
+    } finally {
+      console.log('End launchClearSession...');
+      this.changeDetection.markForCheck();
+    }
+  };
+
+  launchSetAutoLogoutAction = async (): Promise<void> => {
+    try {
+      const result = await this.behaviorService.setAutoLogoutAction();
+      console.log('setAutoLogoutAction result', result);
+    } catch (error) {
+      console.log('Error setAutoLogoutAction', error);
+    }
+  };
+
+  launchSetSessionId = async (): Promise<void> => {
+    console.log('Starting launchSetSessionId...');
+    this.clearError();
+
+    const res = await this.fip360Service.getSessionId('/api/init', {});
+    console.log('getSessionId apiRest', res);
+    const sessionId = res?.sessionId ? res.sessionId : this.fip360Service.getUUID();
+
+    try {
+      const result = await this.behaviorService.setSessionId(sessionId);
+      console.log('setSessionId result', result);
+
+      if (result.finishStatus === this.finishOk) {
+        this.behaviorService.sessionId = sessionId;
+      } else if (result.finishStatus === this.finishError) {
+        this.setError(result.errorMessage || result.errorType || 'Unknown error');
+      }
+    } catch (error) {
+      console.log('Error setSessionId', error);
+      this.setError(String(error));
+    } finally {
+      console.log('End setSessionId...');
+    }
+  };
+
+  launchSetUserId = async (user: string): Promise<void> => {
+    console.log('Starting launchSetUserId...');
+    this.clearError();
+
+    try {
+      const result = await this.behaviorService.setUserId(user);
+      console.log('setUserId result', result);
+
+      if (result.finishStatus === this.finishOk) {
+        this.behaviorService.userId = user;
+      } else if (result.finishStatus === this.finishError) {
+        this.setError(result.errorMessage || result.errorType || 'Unknown error');
+      }
+    } catch (error) {
+      console.log('Error setUserId', error);
+      this.setError(String(error));
+    } finally {
+      console.log('End setUserId...');
+    }
+  };
+
+  launchSetPosition = async (position: string): Promise<void> => {
+    console.log('Starting launchSetPosition...');
+    this.clearError();
+
+    try {
+      const result: BehaviorResult = await this.behaviorService.setPosition(position);
+      console.log('setPosition result', result);
+
+      if (result.finishStatus === this.finishError) {
+        this.setError(result.errorMessage || result.errorType || 'Unknown error');
+      }
+    } catch (error) {
+      console.log('Error setPosition', error);
+      this.setError(String(error));
+    } finally {
+      console.log('End setPosition...');
+    }
+  };
+
+  handleSubmit = async (): Promise<void> => {
+    if (!this.user.trim()) {
+      this.localError = 'User is required';
+      this.changeDetection.markForCheck();
       return;
     }
-    if (!ionInputPass) {
-      console.log('passwordInput not found');
+
+    this.localError = '';
+    const user = this.user.trim();
+    await this.launchSetUserId(user);
+    await this.launchSetPosition('Home');
+    this.router.navigateByUrl('/home');
+  };
+
+  private registerTypingField = async (): Promise<void> => {
+    if (this.fieldsRegistered) {
+      return;
+    }
+
+    const ionInputUser = document.getElementById('userInput') as HTMLIonInputElement | null;
+    if (!ionInputUser) {
+      console.log('userInput not found');
       return;
     }
 
     const userInput = await ionInputUser.getInputElement();
-    const passInput = await ionInputPass.getInputElement();
-
-    this.behaviorService.initializeRegisterField(userInput, 'username');
-    this.behaviorService.initializeRegisterField(passInput, 'password');
-    
-    console.log("registerFields ends ...");
-  }
+    this.behaviorService.initializeRegisterField(userInput, 'user');
+    this.fieldsRegistered = true;
+    console.log('registerField: userInput ready');
+  };
 }
