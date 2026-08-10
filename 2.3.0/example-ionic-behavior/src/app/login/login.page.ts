@@ -33,7 +33,7 @@ export class LoginPage implements OnInit, AfterViewInit {
 
   async ngOnInit(): Promise<void> {
     await this.platform.ready();
-    this.behaviorService.addEventsListener((response: any) => {
+    this.behaviorService.addEventsListener((response: BehaviorResult) => {
       console.log('WGT_BEHAVIOR_EVENTS', response);
     });
 

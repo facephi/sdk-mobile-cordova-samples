@@ -68,7 +68,8 @@ export class BehaviorService {
     return facephi.plugins.wgt.behavior.setAutoLogoutAction();
   };
 
-  addEventsListener = (callback: (response: any) => void): void => {
+  addEventsListener = (callback: (response: BehaviorResult) => void): void => 
+  {
     facephi.plugins.wgt.behavior.startListeningBehaviorEvents(
       callback,
       (err: any) => console.error('WGT_BEHAVIOR_EVENTS error', err)
