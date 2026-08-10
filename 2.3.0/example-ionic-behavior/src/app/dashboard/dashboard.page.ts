@@ -3,8 +3,6 @@ import { Router } from '@angular/router';
 import { BehaviorService } from '../services/behavior/behavior.service';
 import { BehaviorResult } from '../services/behavior/behavior.service.result';
 
-declare let facephi: any;
-
 @Component({
   selector: 'app-dashboard',
   templateUrl: 'dashboard.page.html',
@@ -32,10 +30,6 @@ export class DashboardPage {
     this.changeDetection.markForCheck();
   }
 
-  private get finishError(): number {
-    return facephi?.plugins?.wgt?.behavior?.finishStatus?.Error ?? 2;
-  }
-
   launchSetPosition = async (position: string): Promise<void> => {
     console.log('Starting launchSetPosition...');
     this.showError = false;
@@ -44,7 +38,7 @@ export class DashboardPage {
       const result: BehaviorResult = await this.behaviorService.setPosition(position);
       console.log('setPosition result', result);
 
-      if (result.finishStatus === this.finishError) {
+      if (result.finishStatus === this.behaviorService.finishError) {
         this.setError(result.errorMessage || result.errorType || 'Unknown error');
       }
     } catch (error) {

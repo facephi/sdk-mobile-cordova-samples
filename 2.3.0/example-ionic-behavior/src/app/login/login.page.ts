@@ -5,8 +5,6 @@ import { Fip360Service } from '../api/api-rest/fip360.service';
 import { BehaviorService } from '../services/behavior/behavior.service';
 import { BehaviorResult } from '../services/behavior/behavior.service.result';
 
-declare let facephi: any;
-
 @Component({
   selector: 'app-login',
   templateUrl: 'login.page.html',
@@ -59,14 +57,6 @@ export class LoginPage implements OnInit, AfterViewInit {
     this.changeDetection.markForCheck();
   }
 
-  private get finishOk(): number {
-    return facephi?.plugins?.wgt?.behavior?.finishStatus?.Ok ?? 1;
-  }
-
-  private get finishError(): number {
-    return facephi?.plugins?.wgt?.behavior?.finishStatus?.Error ?? 2;
-  }
-
   launchInitialize = async (): Promise<void> => {
     console.log('Starting launchInitialize...');
     this.clearError();
@@ -75,11 +65,11 @@ export class LoginPage implements OnInit, AfterViewInit {
       const result = await this.behaviorService.initialize();
       console.log('initialize result', result);
 
-      if (result.finishStatus === this.finishOk) {
+      if (result.finishStatus === this.behaviorService.finishOk) {
         await this.launchSetSessionId();
         await this.launchSetAutoLogoutAction();
         await this.launchSetPosition('Login');
-      } else if (result.finishStatus === this.finishError) {
+      } else if (result.finishStatus === this.behaviorService.finishError) {
         this.setError(result.errorMessage || result.errorType || 'Unknown error');
       }
     } catch (error) {
@@ -126,9 +116,9 @@ export class LoginPage implements OnInit, AfterViewInit {
       const result = await this.behaviorService.setSessionId(sessionId);
       console.log('setSessionId result', result);
 
-      if (result.finishStatus === this.finishOk) {
+      if (result.finishStatus === this.behaviorService.finishOk) {
         this.behaviorService.sessionId = sessionId;
-      } else if (result.finishStatus === this.finishError) {
+      } else if (result.finishStatus === this.behaviorService.finishError) {
         this.setError(result.errorMessage || result.errorType || 'Unknown error');
       }
     } catch (error) {
@@ -147,9 +137,9 @@ export class LoginPage implements OnInit, AfterViewInit {
       const result = await this.behaviorService.setUserId(user);
       console.log('setUserId result', result);
 
-      if (result.finishStatus === this.finishOk) {
+      if (result.finishStatus === this.behaviorService.finishOk) {
         this.behaviorService.userId = user;
-      } else if (result.finishStatus === this.finishError) {
+      } else if (result.finishStatus === this.behaviorService.finishError) {
         this.setError(result.errorMessage || result.errorType || 'Unknown error');
       }
     } catch (error) {
@@ -168,7 +158,7 @@ export class LoginPage implements OnInit, AfterViewInit {
       const result: BehaviorResult = await this.behaviorService.setPosition(position);
       console.log('setPosition result', result);
 
-      if (result.finishStatus === this.finishError) {
+      if (result.finishStatus === this.behaviorService.finishError) {
         this.setError(result.errorMessage || result.errorType || 'Unknown error');
       }
     } catch (error) {

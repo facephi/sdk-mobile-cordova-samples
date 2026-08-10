@@ -15,6 +15,14 @@ export class BehaviorService {
 
   constructor(public platform: Platform) {}
 
+  get finishOk(): number {
+    return facephi?.plugins?.wgt?.behavior?.finishStatus?.Ok ?? 1;
+  }
+
+  get finishError(): number {
+    return facephi?.plugins?.wgt?.behavior?.finishStatus?.Error ?? 2;
+  }
+
   generateUUID = (): string => {
     return facephi.plugins.wgt.behavior.utils.generateUUID();
   };
