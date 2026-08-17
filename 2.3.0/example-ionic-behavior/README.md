@@ -64,33 +64,17 @@ ionic cordova plugin add @fip360/widget-behavior-cordova \
 
 ## 5. Configuración específica de Android
 
-### 5.1 Clase `Application` (obligatorio)
+### 5.1 Auto-init (sin clase `Application`)
 
-El SDK debe arrancar **antes** de que el WebView / bridge de Cordova lo usen. Este ejemplo ya lo tiene resuelto en [platforms/android/app/src/main/java/com/demo/behavior/BehaviorApplication.kt](platforms/android/app/src/main/java/com/demo/behavior/BehaviorApplication.kt):
-
-```kotlin
-package com.demo.behavior
-
-import android.app.Application
-import com.facephi.wgt.behavior.wgtbehavior.WgtBehaviorApplication
-
-class BehaviorApplication : Application()
-{
-    override fun onCreate()
-    {
-        super.onCreate()
-        WgtBehaviorApplication().initialize(this)
-    }
-}
-```
-
-Y registrada en `platforms/android/app/src/main/AndroidManifest.xml`, en el tag `<application>`:
+El plugin registra un `ContentProvider` (`WgtBehaviorInitProvider`) que Android instancia al arrancar el proceso. **No hace falta** crear una clase `Application` ni poner `android:name` en el manifesto. Tras `cordova prepare android`, verifica que el manifesto generado incluye el provider:
 
 ```xml
-<application android:name=".BehaviorApplication" ... >
+<provider
+    android:name="com.facephi.wgt.behavior.wgtbehavior.WgtBehaviorInitProvider"
+    android:authorities="${applicationId}.wgtbehavior.init"
+    android:exported="false"
+    android:initOrder="100" />
 ```
-
-**Importante:** `platforms/android` se regenera con `cordova platform rm/add android` (o al restaurar el proyecto desde cero). Esa clase vive dentro de la plataforma generada, así que **no sobrevive** a esa operación — hay que volver a crear el archivo y volver a añadir `android:name=".BehaviorApplication"` cada vez. En un proyecto real conviene automatizarlo con un hook `after_prepare` de Cordova.
 
 ### 5.2 Permisos
 
@@ -125,7 +109,9 @@ La clave de licencia se configura en [src/app/constants.ts](src/app/constants.ts
 const licenseKey = this.platform.is('ios') ? LICENSE_APIKEY_IOS : LICENSE_APIKEY_ANDROID;
 ```
 
-Sustituye esos valores por la licencia que Facephi te entregue para tu `applicationId` / bundle id — las que trae el ejemplo son de un entorno de pruebas y no válidas para producción.
+Sustituye esos valores por la licencia que Facephi te entregue para tu `applicationId` / bundle id.
+
+En **esta versión** del plugin: `LICENSE_APIKEY_IOS` se aplica al llamar a `initialize()`; `LICENSE_APIKEY_ANDROID` se envía en JS pero el bootstrap nativo de Android arranca con licencia vacía (el `ContentProvider` no lee el config JS).
 
 ## 8. Cómo se usa el widget en el código
 
@@ -171,7 +157,7 @@ Más variantes (hot reload, ejecución en dispositivo iOS concreto, symlinks nec
 
 ## 10. Problemas frecuentes
 
-- **`AUTO_LOGOUT` nunca llega / `initialize` parece no arrancar en Android:** revisa que `AndroidManifest.xml` siga teniendo `android:name=".BehaviorApplication"` — se pierde cada vez que se regenera `platforms/android` (punto 5.1).
+- **`AUTO_LOGOUT` nunca llega / `initialize` parece no arrancar en Android:** revisa que el manifesto generado incluya `WgtBehaviorInitProvider` (punto 5.1).
 - **App Store / Play Store rechaza la app por permisos:** revisa que los textos de uso de ubicación en iOS sean específicos de tu app (punto 6) y que `QUERY_ALL_PACKAGES` esté justificado si lo mantienes (punto 5.2).
 - **`setSessionId` / `registerField` fallan silenciosamente:** confirma que `initialize()` devolvió `finishStatus === finishOk` antes de encadenar cualquier otra llamada; el SDK nativo debe estar inicializado primero.
 - **Permisos runtime de Android (ubicación, teléfono):** declararlos en el manifest no basta en API 23+; tu app debe solicitarlos en tiempo de ejecución antes de que dependan de ellos las capacidades de detección.
