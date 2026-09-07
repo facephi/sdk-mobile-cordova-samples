@@ -25,14 +25,35 @@ function callVoice()
         voiceResponse = null;
         facephi.plugins.sdkvoice.launchVoice(config)
         .then(
-            (result) => console.log(result),
-            (err) => console.log(err),
+            (result) =>
+            {
+                console.log(result);
+                if (result == null || result == undefined) {
+                    showErrorUI(fphi_str_unknown_error);
+                    return;
+                }
+
+                switch (parseInt(result['finishStatus']))
+                {
+                    case SdkMobileFinishStatus.Ok:
+                        voiceResponse = result;
+                        $("#messageResult").html("").removeClass("blink").hide();
+                        break;
+
+                    case SdkMobileFinishStatus.Error:
+                        showErrorUI(result['errorType'] || fphi_str_unknown_error);
+                        break;
+
+                    default:
+                        showErrorUI(fphi_str_unknown_error);
+                }
+            },
+            (err) => showErrorUI(err),
         )
         .finally (() =>
         {
             isStartingSDK = false;
             console.log("callVoice finished...");
-            $("#messageResult").html("").removeClass("blink").css("color", "#ff0000").css("text-align", "center").show();
         });
     } catch (e) {
         isStartingSDK = false;
