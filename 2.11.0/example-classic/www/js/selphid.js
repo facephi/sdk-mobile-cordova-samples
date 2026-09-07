@@ -28,7 +28,7 @@ function callSelphID()
     config_id.documentType              = facephi.plugins.doctype.SdkSelphIDDocumentType.IDCard;
     config_id.resourcesPath             = "fphi-selphid-widget-resources-sdk.zip";
     config_id.specificData              = "AR|<ALL>";
-
+    //config_id.params                  = { "PromiscuousMode": "Full" }; //None|Half|Full
     tokenFaceImage = null;
     
     //const lic = window.cordova.platformId.toUpperCase() == "IOS" ? LICENSEIOS : LICENSEANDROID
