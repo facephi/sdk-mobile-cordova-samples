@@ -101,10 +101,10 @@
     font-weight: 600;
 }
 
-.fphi-ui-btn-color-a{
+.fphi-ui-btn-color-a {
     /*letter-spacing: 1px;*/
     font-size: 1.2em;
-    border-radius: 25px !important;
+    border-radius: 5px !important;
     background:#10a3c7 !important;
     color: white !important;
     font-family: 'Circular Std Bold' !important;

@@ -1,9 +1,4 @@
-var data        = null;
-var listener    = function(e)
-{
-  //console.log("core.flow received!: " + JSON.stringify(e));
-  console.log("core.flow received!: ", e);
-}
+var data = null; // Data needed for the next steps api rest call.
 
 function callCloseSession()
 {
@@ -31,41 +26,40 @@ function callInitSession()
         showErrorUI("Cordova Core Sdk is not installed...");
         return;
     }
-
     console.log('callInitSession started...');
-    $("#messageResult").html("Starting proccess...").addClass("blink").css("color", "#000000").css("text-align","center").show();
-
-    if (isStartingSDK) {
-        console.log("A process is running...");
-        return false;
-    }
-    isStartingSDK = true;
-
-    const lic       = window.cordova.platformId.toUpperCase() == "IOS" ? LICENSEIOS_NEW : LICENSEANDROID_NEW
-    const apiKey    = window.cordova.platformId.toUpperCase() == "IOS" ? LICENSE_APIKEY_IOS : LICENSE_APIKEY_ANDROID
-    facephi.plugins.sdkcore.launchInitSession({
-        "license": lic,
-        //"licenseUrl": LICENSE_URL,
-        //"licenseApiKey": apiKey,
-        "enableTracking": true,
-    })
-    .then(
-        (result) => 
-        {
-            console.log(result);
-            if (parseInt(result['finishStatus']) == SdkMobileFinishStatus.Error)
-            {
-                getErrorStringToShow(result);
-            }
-        },
-        (err) => console.log(err),
-    )
-    .finally (() =>
+    
+    try
     {
-        isStartingSDK = false
-        console.log("callInitSession finished...");
-        $("#messageResult").html("").removeClass("blink").css("color", "#ff0000").css("text-align", "center").show();
-    });
+        const lic       = window.cordova.platformId.toUpperCase() == "IOS" ? LICENSEIOS_NEW : LICENSEANDROID_NEW
+        const apiKey    = window.cordova.platformId.toUpperCase() == "IOS" ? LICENSE_APIKEY_IOS : LICENSE_APIKEY_ANDROID
+        facephi.plugins.sdkcore.launchInitSession({
+            //"license": lic,
+            "licenseUrl": LICENSE_URL,
+            "licenseApiKey": apiKey,
+            "enableTracking": true
+        })
+        .then(
+            (result) =>
+            {
+                console.log(result);
+                if (parseInt(result['finishStatus']) == SdkMobileFinishStatus.Error)
+                {
+                    showErrorUI(result['errorType']);
+                }
+            },
+            (err) => console.log(err),
+        )
+        .finally (() =>
+        {
+            isStartingSDK = false;
+            console.log("callInitSession finished...");
+            $("#messageResult").html("").removeClass("blink").css("color", "#ff0000").css("text-align", "center").show();
+        });
+    } catch (e) {
+        isStartingSDK = false;
+        console.log(e);
+        showErrorUI(e.message || e);
+    }
 }
 
 function callInitOperation()
@@ -75,36 +69,42 @@ function callInitOperation()
         return;
     }
 
-    console.log('callInitOperation started...');
-    $("#messageResult").html("Starting proccess...").addClass("blink").css("color", "#000000").css("text-align","center").show();
-
     if (isStartingSDK) {
         console.log("A process is running...");
         return false;
     }
     isStartingSDK = true;
 
-    facephi.plugins.sdkcore.launchInitOperation({
-        "customerId": "cordoba@facephi.com",
-        "type": SdkMobileOperationType.ONBOARDING,
-        "steps": ""
-    })
-    .then(
-        (result) => {
-            console.log(result);
-            if (parseInt(result['finishStatus']) == SdkMobileFinishStatus.Error)
-            {
-                getErrorStringToShow(result);
-            }
-        },
-        (err) => console.log(err),
-    )
-    .finally (() =>
-    {
-        isStartingSDK = false
-        console.log("callInitOperation finished...");
-        $("#messageResult").html("").removeClass("blink").css("color", "#ff0000").css("text-align", "center").show();
-    });
+    console.log('callInitOperation started...');
+    $("#messageResult").html("Starting proccess...").addClass("blink").css("color", "#000000").css("text-align","center").show();
+
+    try {
+        facephi.plugins.sdkcore.launchInitOperation({
+            "customerId": "cordoba@facephi.com",
+            "type": SdkMobileOperationType.ONBOARDING,
+            "steps": ""
+        })
+        .then(
+            (result) => {
+                console.log(result);
+                if (parseInt(result['finishStatus']) == SdkMobileFinishStatus.Error)
+                {
+                    showErrorUI(result['errorType']);
+                }
+            },
+            (err) => console.log(err),
+        )
+        .finally (() =>
+        {
+            isStartingSDK = false;
+            console.log("callInitOperation finished...");
+            $("#messageResult").html("").removeClass("blink").css("color", "#ff0000").css("text-align", "center").show();
+        });
+    } catch (e) {
+        isStartingSDK = false;
+        console.log(e);
+        showErrorUI(e.message || e);
+    }
 }
 
 function callGetExtraData()
@@ -114,49 +114,46 @@ function callGetExtraData()
         return;
     }
 
-    console.log('callGetExtraData started...');
-    $("#messageResult").html("Starting proccess...").addClass("blink").css("color", "#000000").css("text-align","center").show();
-
     if (isStartingSDK) {
         console.log("A process is running...");
         return false;
     }
     isStartingSDK = true;
 
-    data = null;
-    facephi.plugins.sdkcore.launchGetExtraData()
-    .then(
-        (result) => {
-            console.log(result);
-            if (parseInt(result.finishStatus) == 1)
-            {
-                data = result.data;
+    console.log('callGetExtraData started...');
+    $("#messageResult").html("Starting proccess...").addClass("blink").css("color", "#000000").css("text-align","center").show();
 
-                passiveLivenessEvaluate();
-                authenticateFacialDocument();
-            }
-        },
-        (err) => console.log(err),
-    )
-    .finally (() =>
-    {
-        isStartingSDK = false
-        console.log("callGetExtraData finished...");
-        $("#messageResult").html("").removeClass("blink").css("color", "#ff0000").css("text-align", "center").show();
-    });
+    try {
+        data = null;
+        facephi.plugins.sdkcore.launchGetExtraData()
+        .then(
+            (result) => {
+                console.log(result);
+                if (parseInt(result.finishStatus) == SdkMobileFinishStatus.Ok)
+                {
+                    data = result.data;
+
+                    passiveLivenessEvaluate();
+                    authenticateFacialDocument();
+                }
+            },
+            (err) => console.log(err),
+        )
+        .finally (() =>
+        {
+            isStartingSDK = false;
+            console.log("callGetExtraData finished...");
+            $("#messageResult").html("").removeClass("blink").css("color", "#ff0000").css("text-align", "center").show();
+        });
+    } catch (e) {
+        isStartingSDK = false;
+        console.log(e);
+        showErrorUI(e.message || e);
+    }
 }
 
 async function callFlow()
 {
-    if (typeof window.broadcaster === "undefined")
-    {
-        showErrorUI("Cordova broadcaster Sdk is not installed...");
-    }
-    else
-    {
-        window.broadcaster.addEventListener("core.flow", listener);
-    }
-
     if (typeof facephi.plugins.sdkcore === "undefined") {
         showErrorUI("Cordova Core Sdk is not installed...");
         return;
@@ -182,18 +179,6 @@ async function callFlow()
     await facephi.plugins.sdkselphi.setSelphiFlow()
     .then(
         (result) => { console.log("setSelphiFlow result", result); },
-        (err) => console.log(err),
-    );
-
-    await facephi.plugins.sdknfc.setNfcFlow()
-    .then(
-        (result) => { console.log("setNfcFlow result", result); },
-        (err) => console.log(err),
-    );
-
-    await facephi.plugins.sdkphingers.setPhingersFlow()
-    .then(
-        (result) => { console.log("setPhingersFlow result", result); },
         (err) => console.log(err),
     );
 
