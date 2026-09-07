@@ -26,7 +26,7 @@ function callPhingers()
     facephi.plugins.sdkphingers.launchPhingers(config)
     .then(
         (result) => onSuccessPhingersExtraction(result),
-        (err) => onErrorPhingersExtraction(err),
+        (err) => showErrorUI(err),
     )
     .finally (() =>
     {
@@ -64,7 +64,7 @@ const onSuccessPhingersExtraction = (result) =>
             case SdkMobileFinishStatus.Error: // Error
                 if (data['errorType'])
                 {
-                    getErrorStringToShow(data);
+                    showErrorUI(data['errorType']);
                 }
                 else
                 {
@@ -78,19 +78,5 @@ const onSuccessPhingersExtraction = (result) =>
     }
     else {
         showErrorUI(fphi_str_unknown_error);
-    }
-};
-
-/**
- * Event launched when Widget Plugin launches an exception/error.
- * @method onErrorPhingersExtraction
- * @param String result The result widget object
- */
-const onErrorPhingersExtraction = (result) =>
-{
-    console.log('Enter to onErrorPhingersExtraction', result);
-    if (result != null && result)
-    {
-        showErrorUI(result);
     }
 };
