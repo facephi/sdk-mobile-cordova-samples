@@ -12,7 +12,7 @@ function callCloseSession()
     facephi.plugins.sdkcore.launchCloseSession({"operationEventTracking": SdkMobileEventTracking.Success})
     .then(
         (result) => { console.log(result); },
-        (err) => console.log(err),
+        (err) => showErrorUI(err),
     )
     .finally (() =>
     {
@@ -26,10 +26,9 @@ function callInitSession()
         showErrorUI("Cordova Core Sdk is not installed...");
         return;
     }
+
     console.log('callInitSession started...');
-    
-    try
-    {
+    try {
         const lic       = window.cordova.platformId.toUpperCase() == "IOS" ? LICENSEIOS_NEW : LICENSEANDROID_NEW
         const apiKey    = window.cordova.platformId.toUpperCase() == "IOS" ? LICENSE_APIKEY_IOS : LICENSE_APIKEY_ANDROID
         facephi.plugins.sdkcore.launchInitSession({
@@ -46,14 +45,17 @@ function callInitSession()
                 {
                     showErrorUI(result['errorType']);
                 }
+                else
+                {
+                    $("#messageResult").html("").removeClass("blink").hide();
+                }
             },
-            (err) => console.log(err),
+            (err) => showErrorUI(err),
         )
         .finally (() =>
         {
             isStartingSDK = false;
             console.log("callInitSession finished...");
-            $("#messageResult").html("").removeClass("blink").css("color", "#ff0000").css("text-align", "center").show();
         });
     } catch (e) {
         isStartingSDK = false;
@@ -91,14 +93,17 @@ function callInitOperation()
                 {
                     showErrorUI(result['errorType']);
                 }
+                else
+                {
+                    $("#messageResult").html("").removeClass("blink").hide();
+                }
             },
-            (err) => console.log(err),
+            (err) => showErrorUI(err),
         )
         .finally (() =>
         {
             isStartingSDK = false;
             console.log("callInitOperation finished...");
-            $("#messageResult").html("").removeClass("blink").css("color", "#ff0000").css("text-align", "center").show();
         });
     } catch (e) {
         isStartingSDK = false;
@@ -132,18 +137,26 @@ function callGetExtraData()
                 if (parseInt(result.finishStatus) == SdkMobileFinishStatus.Ok)
                 {
                     data = result.data;
+                    $("#messageResult").html("").removeClass("blink").hide();
 
                     passiveLivenessEvaluate();
                     authenticateFacialDocument();
                 }
+                else if (parseInt(result.finishStatus) == SdkMobileFinishStatus.Error)
+                {
+                    showErrorUI(result['errorType']);
+                }
+                else
+                {
+                    $("#messageResult").html("").removeClass("blink").hide();
+                }
             },
-            (err) => console.log(err),
+            (err) => showErrorUI(err),
         )
         .finally (() =>
         {
             isStartingSDK = false;
             console.log("callGetExtraData finished...");
-            $("#messageResult").html("").removeClass("blink").css("color", "#ff0000").css("text-align", "center").show();
         });
     } catch (e) {
         isStartingSDK = false;
@@ -167,24 +180,24 @@ async function callFlow()
      })
     .then(
         (result) => { console.log("launchInitFlow result", result); },
-        (err) => console.log(err),
+        (err) => showErrorUI(err),
     );
 
     await facephi.plugins.sdkselphid.setSelphidFlow()
     .then(
         (result) => { console.log("setSelphidFlow result", result); },
-        (err) => console.log(err),
+        (err) => showErrorUI(err),
     );
 
     await facephi.plugins.sdkselphi.setSelphiFlow()
     .then(
         (result) => { console.log("setSelphiFlow result", result); },
-        (err) => console.log(err),
+        (err) => showErrorUI(err),
     );
 
     await facephi.plugins.sdkcore.launchStartFlow()
     .then(
         (result) => { console.log("launchStartFlow result", result); },
-        (err) => console.log(err),
+        (err) => showErrorUI(err),
     );
 }
