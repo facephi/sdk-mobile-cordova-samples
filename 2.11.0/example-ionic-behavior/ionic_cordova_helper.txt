@@ -1,0 +1,33 @@
+CREATE WWW(IMPORTANTE SI CAMBIAS EL package.json): 
+npm run build
+ionic cordova prepare android
+ionic cordova prepare android --no-build
+ionic cordova run android -l
+
+HOT RELOAD:
+/* IMPORTANTE: desinstalar la app del celular para evitar problemas */
+ionic cordova run android --livereload --device
+ionic cordova run android -l
+ionic cordova run ios --livereload --external
+
+FOR IOS:
+xcrun xctrace list devices
+# Symlinks (cordova-ios 8 vs Ionic):
+ln -sfn Debug-iphonesimulator platforms/ios/build/emulator
+ln -sfn Debug-iphoneos platforms/ios/build/device
+
+ionic cordova run ios --device --target="00008030-001E106C366B402E" --livereload --external
+
+# Si native-run no ve el device (WiFi/CoreDevice), instalar y lanzar a mano:
+# (deja el livereload de ionic corriendo en :8100)
+xcrun devicectl device install app --device 00008030-001E106C366B402E "platforms/ios/build/Debug-iphoneos/Behavior Example.ipa"
+xcrun devicectl device process launch --device 00008030-001E106C366B402E com.demo.behavior
+
+HOT RELOAD MAS TUNEADO (elige node 20 & java 17):
+bash -lc "source \"$HOME/.nvm/nvm.sh\" && nvm use 20 && export JAVA_HOME=\"/opt/homebrew/opt/openjdk@17/libexec/openjdk.jdk/Contents/Home\" && export PATH=\"$JAVA_HOME/bin:$PATH\" && ionic cordova run android -l"
+
+ionic cordova prepare ios
+ionic cordova build ios --device --target="00008030-001E106C366B402E"
+ln -sfn Debug-iphoneos platforms/ios/build/device
+xcrun devicectl device install app --device 00008030-001E106C366B402E "platforms/ios/build/Debug-iphoneos/Behavior Example.ipa"
+xcrun devicectl device process launch --device 00008030-001E106C366B402E com.demo.behavior
