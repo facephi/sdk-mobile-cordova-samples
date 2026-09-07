@@ -12,7 +12,7 @@ function callCloseSession()
     facephi.plugins.sdkcore.launchCloseSession({"operationEventTracking": SdkMobileEventTracking.Success})
     .then(
         (result) => { console.log(result); },
-        (err) => console.log(err),
+        (err) => showErrorUI(err),
     )
     .finally (() =>
     {
@@ -28,31 +28,40 @@ function callInitSession()
     }
 
     console.log('callInitSession started...');
-    const lic       = window.cordova.platformId.toUpperCase() == "IOS" ? LICENSEIOS_NEW : LICENSEANDROID_NEW
-    const apiKey    = window.cordova.platformId.toUpperCase() == "IOS" ? LICENSE_APIKEY_IOS : LICENSE_APIKEY_ANDROID
-    facephi.plugins.sdkcore.launchInitSession({
-        "license": lic,
-        //"licenseUrl": LICENSE_URL,
-        //"licenseApiKey": apiKey,
-        "enableTracking": true
-    })
-    .then(
-        (result) => 
-        {
-            console.log(result);
-            if (parseInt(result['finishStatus']) == SdkMobileFinishStatus.Error)
+    try {
+        const lic       = window.cordova.platformId.toUpperCase() == "IOS" ? LICENSEIOS_NEW : LICENSEANDROID_NEW
+        const apiKey    = window.cordova.platformId.toUpperCase() == "IOS" ? LICENSE_APIKEY_IOS : LICENSE_APIKEY_ANDROID
+        facephi.plugins.sdkcore.launchInitSession({
+            //"license": lic,
+            "licenseUrl": LICENSE_URL,
+            "licenseApiKey": apiKey,
+            "enableTracking": true
+        })
+        .then(
+            (result) =>
             {
-                showErrorUI(result['errorType']);
-            }
-        },
-        (err) => console.log(err),
-    )
-    .finally (() =>
-    {
+                console.log(result);
+                if (parseInt(result['finishStatus']) == SdkMobileFinishStatus.Error)
+                {
+                    showErrorUI(result['errorType']);
+                }
+                else
+                {
+                    $("#messageResult").html("").removeClass("blink").hide();
+                }
+            },
+            (err) => showErrorUI(err),
+        )
+        .finally (() =>
+        {
+            isStartingSDK = false;
+            console.log("callInitSession finished...");
+        });
+    } catch (e) {
         isStartingSDK = false;
-        console.log("callInitSession finished...");
-        $("#messageResult").html("").removeClass("blink").css("color", "#ff0000").css("text-align", "center").show();
-    });
+        console.log(e);
+        showErrorUI(e.message || e);
+    }
 }
 
 function callInitOperation()
@@ -62,34 +71,43 @@ function callInitOperation()
         return;
     }
 
-    console.log('callInitOperation started...');
-    $("#messageResult").html("Starting proccess...").addClass("blink").css("color", "#000000").css("text-align","center").show();
-
     if (isStartingSDK) {
         console.log("A process is running...");
         return false;
     }
     isStartingSDK = true;
 
-    facephi.plugins.sdkcore.launchInitOperation({
-        "customerId": "cordoba@facephi.com",
-        "type": SdkMobileOperationType.ONBOARDING,
-        "steps": ""
-    })
-    .then(
-        (result) => {
-            console.log(result);
-            if (parseInt(result['finishStatus']) == SdkMobileFinishStatus.Error)
-            {
-                showErrorUI(result['errorType']);
-            }
-        },
-        (err) => console.log(err),
-    )
-    .finally (() =>
-    {
+    console.log('callInitOperation started...');
+    $("#messageResult").html("Starting proccess...").addClass("blink").css("color", "#000000").css("text-align","center").show();
+
+    try {
+        facephi.plugins.sdkcore.launchInitOperation({
+            "customerId": "cordoba@facephi.com",
+            "type": SdkMobileOperationType.ONBOARDING,
+            "steps": ""
+        })
+        .then(
+            (result) => {
+                console.log(result);
+                if (parseInt(result['finishStatus']) == SdkMobileFinishStatus.Error)
+                {
+                    showErrorUI(result['errorType']);
+                }
+                else
+                {
+                    $("#messageResult").html("").removeClass("blink").hide();
+                }
+            },
+            (err) => showErrorUI(err),
+        )
+        .finally (() =>
+        {
+            isStartingSDK = false;
+            console.log("callInitOperation finished...");
+        });
+    } catch (e) {
         isStartingSDK = false;
-        console.log("callInitOperation finished...");
-        $("#messageResult").html("").removeClass("blink").css("color", "#ff0000").css("text-align", "center").show();
-    });
+        console.log(e);
+        showErrorUI(e.message || e);
+    }
 }
