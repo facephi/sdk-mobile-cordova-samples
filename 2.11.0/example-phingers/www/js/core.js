@@ -59,7 +59,7 @@ function callInitSession()
     {
         isStartingSDK = false;
         console.log("callInitSession finished...");
-        $("#messageResult").html("").removeClass("blink").css("color", "#ff0000").css("text-align", "center").show();
+        $("#messageResult").removeClass("blink");
     });
 }
 
@@ -98,6 +98,6 @@ function callInitOperation()
     {
         isStartingSDK = false;
         console.log("callInitOperation finished...");
-        $("#messageResult").html("").removeClass("blink").css("color", "#ff0000").css("text-align", "center").show();
+        $("#messageResult").removeClass("blink");
     });
 }

@@ -31,8 +31,8 @@ function callPhingers()
     .finally (() =>
     {
         console.log("callPhingers finished...");
-        $("#messageResult").html("").removeClass("blink").css("color", "#ff0000").css("text-align", "center").show();
-        isStartingSDK = false
+        $("#messageResult").removeClass("blink");
+        isStartingSDK = false;
     });
 }
 
