@@ -20,7 +20,7 @@ const fphi_str_unknown_error    = "Unexpected error.";
  */
 function showErrorUI(message) {
     //alert("Error:" + message);
-    $("#messageResult").html("Error: " + message.replace(/_/g, " ")).removeClass("blink").css("color", "#ff0000").css("text-align", "center").show();
+    $("#messageResult").html("Error: " + String(message).replace(/_/g, " ")).removeClass("blink").css("color", "#ff0000").css("text-align", "center").show();
 };
 
 /**
