@@ -28,14 +28,6 @@ function callInitSession()
     }
 
     console.log('callInitSession started...');
-    $("#messageResult").html("Starting proccess...").addClass("blink").css("color", "#000000").css("text-align","center").show();
-
-    if (isStartingSDK) {
-        console.log("A process is running...");
-        return false;
-    }
-    isStartingSDK = true;
-
     const lic       = window.cordova.platformId.toUpperCase() == "IOS" ? LICENSEIOS_NEW : LICENSEANDROID_NEW
     const apiKey    = window.cordova.platformId.toUpperCase() == "IOS" ? LICENSE_APIKEY_IOS : LICENSE_APIKEY_ANDROID
     facephi.plugins.sdkcore.launchInitSession({
