@@ -1,12 +1,22 @@
-console.log( "register getTrackingError received!" );
-
-var listener = function( e ) {
-  //log: didShow received! userInfo: {"data":"test"}
-  console.log( "getTrackingError received! userInfo: " + JSON.stringify(e)  );
-}
-
-setTimeout(function() {
-    if (typeof window.broadcaster !== "undefined") {
-        window.broadcaster.addEventListener( "getTrackingError", listener );
+setTimeout(function()
+{
+    if (typeof facephi.plugins.sdkcore !== "undefined")
+    {
+        facephi.plugins.sdkcore.startListeningTrackingEvents(
+            (event) => {
+                console.log('📡 startListeningTrackingEvents recibido:', event);
+            },
+            (err) => {
+                console.error('❌ Error:', err);
+            }
+        );
+        facephi.plugins.sdkcore.startListeningFlowEvents(
+            (event) => {
+                console.log('📡 startListeningFlowEvents recibido:', event);
+            },
+            (err) => {
+                console.error('❌ Error:', err);
+            }
+        );
     }
 }, 2000);

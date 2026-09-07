@@ -29,7 +29,7 @@ function callVideoId()
     )
     .finally (() =>
     {
-        isStartingSDK = false
+        isStartingSDK = false;
         console.log("callVideoId finished...");
         $("#messageResult").html("").removeClass("blink").css("color", "#ff0000").css("text-align", "center").show();
     });
