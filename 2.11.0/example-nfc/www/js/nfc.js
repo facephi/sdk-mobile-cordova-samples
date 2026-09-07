@@ -23,13 +23,20 @@ function callNfc()
 
     facephi.plugins.sdknfc.launchNfc(config)
     .then(
-        (result) => console.log(result),
-        (err) => console.log(err),
+        (result) => {
+            console.log(result);
+            if (result != null && typeof result['finishStatus'] !== "undefined") {
+                if (parseInt(result['finishStatus']) == SdkMobileFinishStatus.Error) {
+                    showErrorUI(result['errorType'] || fphi_str_unknown_error);
+                }
+            }
+        },
+        (err) => showErrorUI(err),
     )
     .finally (() =>
     {
         console.log("callNfc finished...");
-        $("#messageResult").html("").removeClass("blink").css("color", "#ff0000").css("text-align", "center").show();
-        isStartingSDK = false
+        $("#messageResult").removeClass("blink");
+        isStartingSDK = false;
     });
 }
