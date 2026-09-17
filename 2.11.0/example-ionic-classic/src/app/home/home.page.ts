@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
-import { SdkErrorType, SdkFinishStatus } from '../services/core/core.service.enums';
+import { SdkFinishStatus } from '../services/core/core.service.enums';
 import { SelphidService } from '../services/selphid/selphid.service';
 import { SelphiService } from '../services/selphi-face/selphi.service';
 import { CoreService } from '../services/core/core.service';
@@ -12,15 +12,16 @@ import { LoadingController } from '@ionic/angular';
 declare let facephi: any;
 
 @Component({
-  selector: 'app-home',
-  templateUrl: 'home.page.html',
-  styleUrls: ['home.page.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+    selector: 'app-home',
+    templateUrl: 'home.page.html',
+    styleUrls: ['home.page.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class HomePage implements OnInit
 {
   // UriImage header for base64 images visualization.
-  URI_JPEG_HEADER = 'data:image/jpeg;base64,';
+  URI_JPEG_HEADER: string = 'data:image/jpeg;base64,';
 
   apiRest: FacephiService;
   selphiFaceService: SelphiService;
@@ -112,58 +113,81 @@ export class HomePage implements OnInit
   onInitSession = async () => 
   {
     this.message = '';
-
     console.log("onInitSession starts...");
     await this.coreService.initSession()
     .then(
-      (result: CoreResult) => console.log(result), 
-      (err: any) => console.log(err)
+      (result: CoreResult) => {
+        console.log(result);
+        if (result.finishStatus == SdkFinishStatus.Error)
+        {
+          this.printError(result.errorType);
+        }
+      }, 
+      (err: any) => this.printError(err)
     )
-    .finally(() => console.log("onInitSession ends."));
+    .finally(() => { 
+      console.log("onInitSession ends."); 
+      this.changeDetection.detectChanges(); 
+    });
   }
 
-  onInitOperation = async () => {
+  onInitOperation = async () => 
+  {
     this.message = '';
-
     console.log("onInitOperation starts...");
     await this.coreService.initOperation()
     .then(
-      (result: CoreResult) => console.log(result), 
-      (err: any) => console.log(err)
+      (result: CoreResult) => 
+      {
+        console.log(result)
+        if (result.finishStatus == SdkFinishStatus.Error)
+        {
+          this.printError(result.errorType);
+        }
+      }, 
+      (err: any) => this.printError(err)
     )
-    .finally(() => console.log("onInitOperation ends."));
+    .finally(() => 
+    {
+      console.log("onInitOperation ends.");
+      this.changeDetection.detectChanges();
+    });
   }
 
-  onCloseSession = async () => {
+  onCloseSession = async () => 
+  {
     this.message = '';
-
     console.log("onCloseSession starts.")
     await this.coreService.closeSession()
-    .then((result: CoreResult) => 
-    {
-      console.log(result)
-    },
-    (err: any) => console.log(err))
+    .then(
+      (result: CoreResult) => 
+      {
+        console.log(result)
+        if (result.finishStatus == SdkFinishStatus.Error)
+        {
+          this.printError(result.errorType);
+        }
+      },
+      (err: any) => this.printError(err)
+    )
     .finally(() => 
     {
       console.log("onCloseSession ends.");
+      this.changeDetection.detectChanges();
     });
   }
 
   onGetExtraData = async () => 
   {
     this.message = '';
-    let loading = await this.loadingCtrl.create({
-      message: 'Requesting ...',
-    });
+    let loading = await this.loadingCtrl.create({message: 'Requesting ...'});
 
     console.log("onGetExtraData starts...");
     await this.coreService.getExtraData()
     .then((result: CoreResult) => 
     {
       console.log(result);
-      
-      if (result.finishStatus == 1) 
+      if (result.finishStatus == SdkFinishStatus.Ok) 
       {
         if (this.selphiResult?.bestImage !== null &&  result.data !== "") 
         {
@@ -226,76 +250,92 @@ export class HomePage implements OnInit
     (err: any) => console.log(err)).finally(() => console.log("onGetExtraData ends."));
   }
 
-  onLaunchSelphiProcess = async () => {
+  onLaunchSelphiProcess = async () => 
+  {
     console.log('onLaunchSelphiProcess starts...');
     this.message = '';
     await this.selphiFaceService.launchSelphiAuthentication()
     .then(
       (result: SelphiFaceResult) => this.onSuccessSelphiExtraction(result), 
-      (err: string) => this.onErrorSelphiExtraction(err)
+      (err: string) => this.printError(err)
     )
-    .finally(() => (console.log("onLaunchSelphiProcess ends.")));
+    .finally(() => {
+      console.log('onLaunchSelphiProcess ends...');
+      this.changeDetection.detectChanges();
+    });
   }
 
   //  Formatting output
-  onSuccessSelphiExtraction = (result: SelphiFaceResult) => {
+  onSuccessSelphiExtraction = (result: SelphiFaceResult) => 
+  {
     console.log('Receiving selphi success event...', result);
-    if (result !== null && result) {
-      switch (result.finishStatus) {
-        case SdkFinishStatus.Ok: // OK
-          this.processSelphiSuccessResult(result); // Logging the info for debug purposes
+    if (result !== null && result) 
+    {
+      switch (result.finishStatus) 
+      {
+        case SdkFinishStatus.Ok:
           this.selphiResult                   = result;
           this.selphiResult!.bestImageCropped = this.URI_JPEG_HEADER + result.bestImageCropped!;
           this.showError                      = false;
-          //this.message                      = 'Preview selfie';
           break;
 
-        case SdkFinishStatus.Error: // Error
-          this.onErrorSelphiExtraction(result);
+        case SdkFinishStatus.Error:
+          this.printError(result.errorType);
           break;
 
         default:
-          console.log('Receiving selphi plugin error event...', result);
-          this.showError  = true;
-          this.message    = 'An error has ocurred. Read the log for more info';
+          this.printError('An error has ocurred. Read the log for more info');
           break;
       }
-      this.changeDetection.detectChanges();
     }
   }
 
-  /** Method implemented only for debug purposes */
-  processSelphiSuccessResult = (result: SelphiFaceResult) => {
-    const message =
-   `* FinishStatus: ' ${ result.finishStatus }
-    * errorType: ' ${ result.errorType }
-    * TemplateRaw length: ' ${ result.templateRaw!.length }
-    * BestImage length: ' ${ result.bestImage!.length }
-    * BestImageCropped length: ' ${ result.bestImageCropped!.length }`;
-    console.log(message);
-  }
-
-  onErrorSelphiExtraction = (result: any) => 
+  onLaunchSelphIDProcess = async () => 
   {
-    console.log('SELPHI_ERROR:' + result);
-    this.showError = true;
-    //this.message   = SdkErrorType[result['errorType']];
-    this.printError(result);
-  }
-
-  onLaunchSelphIDProcess = async () => {
     this.message = '';
-
     console.log("onLaunchSelphIDProcess starts.")
     await this.selphidService.launchSelphidCapture()
     .then(
       (result: SelphIDResult) => this.onSuccessSelphIDCapture(result), 
-      (err: string) => this.onErrorSelphIDCapture(err)
+      (err: string) => this.printError(err)
     )
-    .finally(() => (console.log("onLaunchSelphIDProcess ends.")));
+    .finally(() => {
+      console.log("onLaunchSelphIDProcess ends.");
+      this.changeDetection.detectChanges();
+    });
   }
 
-  openDocumentDataSheet = () => {
+   //  Formatting output
+  onSuccessSelphIDCapture = (result: SelphIDResult) => 
+  {
+    console.log('Receiving selphID success event...', result);
+    if (result !== null && result) 
+    {
+      switch (result.finishStatus) 
+      {
+        case SdkFinishStatus.Ok:
+          this.selphidResult                    = result;
+          this.selphidResult.frontDocumentImage = this.URI_JPEG_HEADER + result.frontDocumentImage;
+          this.selphidResult.backDocumentImage  = this.URI_JPEG_HEADER + result.backDocumentImage;
+          this.selphidResult.faceImage          = (typeof result.faceImage === 'undefined' || result.faceImage === '') ? "./assets/images/image_no_available.png" : this.URI_JPEG_HEADER + result.faceImage;
+          this.selphidResult.documentData       = this.safeJsonParse(result.documentData);
+          this.showError                        = false;
+          this.message                          = 'Preview selfie';
+          break;
+
+        case SdkFinishStatus.Error:
+          this.printError(result.errorType);
+          break;
+
+        default:
+          this.printError('An error has ocurred. Read the log for more info');
+          break;
+      }
+    }
+  }
+
+  openDocumentDataSheet = () => 
+  {
     if (!this.selphidResult?.documentData) {
       return;
     }
@@ -306,65 +346,9 @@ export class HomePage implements OnInit
     this.isDocumentDataSheetOpen = false;
   }
 
-   //  Formatting output
-  onSuccessSelphIDCapture = (result: SelphIDResult) => {
-    console.log('Receiving selphID success event...', result);
-    if (result !== null && result) {
-      switch (result.finishStatus) 
-      {
-        case SdkFinishStatus.Ok: // OK
-          //console.log("documentData", result.documentData);
-          //console.log("documentData parsed", JSON.parse(result.documentData.replace(/\\/g, "")));
-          this.processSuccessResultSelphID(result); // Logging the info for debug purposes
-          this.selphidResult                    = result;
-          this.selphidResult.frontDocumentImage = this.URI_JPEG_HEADER + result.frontDocumentImage;
-          this.selphidResult.backDocumentImage  = this.URI_JPEG_HEADER + result.backDocumentImage;
-          this.selphidResult.faceImage          = (typeof result.faceImage === 'undefined' || result.faceImage === '') ? "./assets/images/image_no_available.png" : this.URI_JPEG_HEADER + result.faceImage;
-          this.selphidResult.documentData       = this.safeJsonParse(result.documentData);
-          this.showError                        = false;
-          this.message                          = 'Preview selfie';
-          break;
-
-        case SdkFinishStatus.Error: // Error
-          console.log('SELPHID_ERROR:' + result);
-          this.showError  = true;
-          this.printError(result);
-
-          break;
-
-        default:
-          console.log('Receiving selphid plugin error event...', result);
-          this.showError  = true;
-          this.message    = 'An error has ocurred. Read the log for more info';
-          break;
-      }
-      this.changeDetection.detectChanges();
-    }
-  }
-
-  /** Method implemented only for debug purposes */
-  processSuccessResultSelphID = (result: SelphIDResult) => {
-    const _message =
-    `* FinishStatus: ' ${ result.finishStatus }
-      * TypeError: ' ${ result.errorType }
-      * TokenFaceImage length: ' ${ (typeof result.tokenFaceImage === 'undefined' || result.tokenFaceImage === '') ? 0 : result.tokenFaceImage.length }
-      * TokenOCR length: ' ${ result.tokenOCR!.length }
-      * TokenDocumentFront length: ' ${ (typeof result.tokenBackDocument === 'undefined' || result.tokenBackDocument === '') ? 0 : result.tokenBackDocument.length }
-      * TokenDocumentBack length: ' ${ (typeof result.tokenFrontDocument === 'undefined' || result.tokenFrontDocument === '') ? 0 : result.tokenFrontDocument.length }
-      * MatchingSidesScore: ' ${ result.matchingSidesScore }`;
-    //console.log(this.URI_JPEG_HEADER + result.faceImage, '');
-    //console.log(_message);
-  }
-
-  onErrorSelphIDCapture = (result: any) => 
+  private printError(error: string)
   {
-    console.log('SELPHID_ERROR', result);
     this.showError  = true;
-    this.message    = 'An error has ocurred. Read the log for more info';
-  }
-
-  private printError(data: any)
-  {
-    this.message = data['errorType'].replace(/_/g, ' ');
+    this.message    = error.replace(/_/g, ' ');
   }
 }

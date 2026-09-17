@@ -2,30 +2,24 @@
  * InitSessionConfiguration.
  * @interface
  */
-export interface InitSessionConfiguration {
-    /**
-    * Property to select the license of the client. Its must be provided by Facephi.
-    * @property {string}
-    * @default: ""
-    * @since 1.0.0
-    */
+export interface InitSessionConfiguration 
+{
     license?: string;
-    /**
-    * Property to select the licenseUrl of the client. Its must be provided by Facephi.
-    * @property {string}
-    * @default: ""
-    * @since 1.0.0
-    */
     licenseUrl?: string;
-    /**
-    * Property to select the licenseApiKey of the client. Its must be provided by Facephi.
-    * @property {string}
-    * @default: ""
-    * @since 1.0.0
-    */
     licenseApiKey?: string;
     enableTracking?: boolean;
     enableDebugMode?: boolean;
-    internalOptions?: Record<string, string>;
     locale?: string;
+    internalOptions?: Record<string, any>;
+    orientation?: SdkViewOrientation;
+    integrationId?: string;
+    enableLocation?: boolean;
+    enableLoggerBackend?: boolean;
+}
+
+export enum SdkViewOrientation {
+    PORTRAIT = "PORTRAIT",
+    PORTRAIT_PHONES = "PORTRAIT_PHONES",
+    LANDSCAPE = "LANDSCAPE",
+    FOLLOW_SYSTEM = "FOLLOW_SYSTEM"
 }
