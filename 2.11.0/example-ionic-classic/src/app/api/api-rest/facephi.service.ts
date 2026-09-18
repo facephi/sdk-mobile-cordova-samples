@@ -1,13 +1,12 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { HTTP } from '@awesome-cordova-plugins/http/ngx'
 
 @Injectable({
   providedIn: 'root'
 })
 export class FacephiService {
 
-  constructor( private http: HttpClient, private http2: HTTP ) { }
+  constructor( private http: HttpClient ) { }
  
   url: string   = 'https://api-services';
   url2: string  = 'https://external-selphid-sdk.facephi.dev';
@@ -49,12 +48,6 @@ export class FacephiService {
 
   passiveLivenessEvaluate( tokenized: string, bestImage: string ) 
   {
-    /*const body = {'extraData': tokenized, 'image': bestImage};
-    
-    return this.http.post<any[]>(
-      this.url2 + '/v5/api/v1/selphid/passive-liveness/evaluate', body, {},
-    );*/
-
     const options: any = {
       method: 'post',
       data: { "extraData": tokenized, "image": bestImage },
@@ -62,17 +55,13 @@ export class FacephiService {
       serializer: 'json'
     };
 
-    return this.http2.sendRequest(this.url2 + '/v5/api/v1/selphid/passive-liveness/evaluate', options);
+    return this.http.post<any[]>(
+      this.url + '/v5/api/v1/selphid/passive-liveness/evaluate', options, {},
+    );
   }
 
   authenticateFacialDocument( tokenFaceImage: string, tokenized: string, bestImage: string ) 
   {
-    /*const body = {'documentTemplate': tokenFaceImage, 'extraData': tokenized, 'image1': bestImage};
-    
-    return this.http.post<any[]>(
-      this.url2 + '/v5/api/v1/selphid/authenticate-facial/document/face-image', body, {},
-    );*/
-
     const options: any = {
       method: 'post',
       data: { 'documentTemplate': tokenFaceImage, 'extraData': tokenized, 'image1': bestImage },
@@ -80,6 +69,8 @@ export class FacephiService {
       serializer: 'json'
     };
 
-    return this.http2.sendRequest(this.url2 + '/v5/api/v1/selphid/authenticate-facial/document/face-image', options);
+    return this.http.post<any[]>(
+      this.url + '/v5/api/v1/selphid/authenticate-facial/document/face-image', options, {},
+    );
   }
 }
