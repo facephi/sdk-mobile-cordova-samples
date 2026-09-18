@@ -5,12 +5,18 @@ import { IonicModule, IonicRouteStrategy, Platform } from '@ionic/angular';
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
-import { HTTP } from '@awesome-cordova-plugins/http/ngx'
 import { CoreService } from './services/core/core.service';
 import { CoreResult } from './services/core/core.service.core.result';
 
-@NgModule({ declarations: [AppComponent],
-    bootstrap: [AppComponent], imports: [BrowserModule, IonicModule.forRoot(), AppRoutingModule], providers: [{ provide: RouteReuseStrategy, useClass: IonicRouteStrategy }, HTTP, provideHttpClient(withInterceptorsFromDi())] })
+@NgModule({ 
+  declarations: [AppComponent],
+  bootstrap: [AppComponent], 
+  imports: [BrowserModule, IonicModule.forRoot(), AppRoutingModule], 
+  providers: [
+    { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }, 
+    provideHttpClient(withInterceptorsFromDi())
+  ] 
+})
 export class AppModule 
 {
   constructor(private platform: Platform, private coreService: CoreService) 
