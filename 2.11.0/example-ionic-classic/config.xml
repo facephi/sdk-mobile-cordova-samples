@@ -118,5 +118,4 @@
     <dependency id="cordova-plugin-advanced-http" />
     <dependency id="cordova-plugin-statusbar" />
     <plugin name="cordova-plugin-splashscreen" spec="6.0.2" />
-    <allow-navigation href="http://localhost:8100" sessionid="929aaffa" />
 </widget>
