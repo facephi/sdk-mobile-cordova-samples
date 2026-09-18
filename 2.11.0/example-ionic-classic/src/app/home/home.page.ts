@@ -8,6 +8,7 @@ import { CoreResult } from '../services/core/core.service.core.result';
 import { SelphiFaceResult } from '../services/selphi-face/selphi.service.result';
 import { SelphIDResult } from '../services/selphid/selphid.service.result';
 import { LoadingController } from '@ionic/angular';
+import { timeout } from 'rxjs';
 
 declare let facephi: any;
 
@@ -191,58 +192,31 @@ export class HomePage implements OnInit
       {
         if (this.selphiResult?.bestImage !== null &&  result.data !== "") 
         {
-          /*this.apiRest.passiveLivenessEvaluate(result.data!, this.bestImage)
-          .pipe(timeout(30000))
-          .subscribe(
-            (res: any) => {
-              console.log("passiveLivenessEvaluate", res);
-            },
-            (err: any) => {
-              console.log("passiveLivenessEvaluate err", err);
-            }
-          );*/
-
           loading.present();
           this.apiRest.passiveLivenessEvaluate(result.data!, this.selphiResult?.bestImage!)
-          .then((res: any) => 
-          { 
-            console.log("passiveLivenessEvaluate", res); 
-          })
-          .catch((err: any) => 
-          { 
-            console.log("passiveLivenessEvaluate err", err); 
-          })
-          .finally(() => 
-          {
-            console.log("passiveLivenessEvaluate finally");
-            loading.dismiss();
+          .pipe(timeout(30000))
+          .subscribe({
+            next: (res: any) => { console.log("passiveLivenessEvaluate", res); },   
+            error: (err: any) => { console.log("passiveLivenessEvaluate", err); },
+            complete: () => { 
+              console.log("passiveLivenessEvaluate completed...");
+              loading.dismiss();
+            }
           });
         }
 
         if (this.selphiResult !== null &&  result.data !== "" &&  this.selphiResult?.tokenFaceImage !== null) 
         {
-          /*this.apiRest.authenticateFacialDocument(this.tokenFaceImage, result.data!, this.bestImage)        
+          loading.present();
+          this.apiRest.authenticateFacialDocument(this.selphiResult?.tokenFaceImage!, result.data!, this.selphiResult?.bestImage!)
           .pipe(timeout(30000))
           .subscribe({
             next: (res: any) => { console.log("authenticateFacialDocument", res); },   
             error: (err: any) => { console.log("authenticateFacialDocument", err); },
-            complete: () => { console.log("authenticateFacialDocument completed..."); }
-          });*/
-
-          loading.present();
-          this.apiRest.authenticateFacialDocument(this.selphiResult?.tokenFaceImage!, result.data!, this.selphiResult?.bestImage!)
-          .then((res: any) => 
-          { 
-            console.log("authenticateFacialDocument", res); 
-          })
-          .catch((err: any) => 
-          { 
-            console.log("authenticateFacialDocument err", err); 
-          })
-          .finally(() => 
-          {
-            console.log("authenticateFacialDocument finally");
-            loading.dismiss();
+            complete: () => { 
+              console.log("authenticateFacialDocument completed...");
+              loading.dismiss();
+            }
           });
         }
       }
