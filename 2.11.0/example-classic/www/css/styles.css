@@ -7,8 +7,9 @@
     overflow: hidden;
     display: -webkit-box;
     -webkit-line-clamp: 15;
+    line-clamp: 15;
     -webkit-box-orient: vertical;
-    //background:#fff;
+    /* background:#fff; */
     border-bottom: 1px solid #bbb;
 }
 
@@ -25,13 +26,6 @@
     height: 50%;
     padding-left: 10%;
     padding-right: 10%;
-}
-
-.fphi-ui-footer {
-    position: absolute !important;
-    bottom: 0;
-    width: 100%;
-    padding-top: 20px;
 }
 
 .fphi-ui-body {
@@ -54,19 +48,6 @@
     text-align: center;
     font-size: 1.6em !important;
     font-family: 'Circular Std Bold' !important;
-}
-
-.fphi-ui-list {
-    max-height: 80% !important;
-    min-height: 80% !important;
-    height: 80% !important;
-    background: #14a3c7;
-}
-
-.resize_fit_center {
-    max-width:100%;
-    max-height:100%;
-    vertical-align: middle;
 }
 
 .ui-header .ui-title {
@@ -109,40 +90,4 @@
     color: white !important;
     font-family: 'Circular Std Bold' !important;
     text-shadow: none !important;
-}
-
-.fphi-ui-btn-color-b{
-    background:#06d48b !important;
-    color: white !important;
-}
-
-.fphi-ui-btn-color-c{
-    background:#a8a8a8 !important;
-    color: white !important;
-}
-
-.fphi-ui-btn-color-d{
-    background:#06d48b !important;
-    color: white !important;
-}
-
-.fphi-ui-btn-color-f{
-    background:#14a3c7 !important;
-    color: white !important;
-}
-
-.ui-listview .ui-li-icon {
-    max-height: 28px !important;
-    max-width: 28px !important;
-    left: 10px;
-    right: 10px;
-    top: .9em;
-}
-
-.deleteLink {
-    color: black;
-}
-
-.popUpWidth {
-    max-width:400px;
 }

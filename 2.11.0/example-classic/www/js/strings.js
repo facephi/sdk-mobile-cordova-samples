@@ -21,14 +21,3 @@ function showErrorUI(message) {
     //alert("Error:" + message);
     $("#messageResult").html("Error: " + message.replace(/_/g, " ")).removeClass("blink").css("color", "#ff0000").css("text-align", "center").show();
 };
-
-/**
- * Method to show a message in the UI
- * @method showMessageUI
- * @param String result The message to show
- */
-function showMessageUI(message)
-{
-    //alert(message);
-    $("#messageResult").html(message).removeClass("blink").css("color", "#ff0000").css("text-align", "center").show();
-};
