@@ -9,8 +9,7 @@ function callSelphi()
 
     console.log('callSelphi started...');
 
-    $("#authenticationResponse").hide();
-    $("#selphidResponse").hide();
+    $("#authenticationResponse, #selphidResponse").hide();
     $("#messageResult").html("Starting proccess...").addClass("blink").css("color", "#000000").css("text-align","center").show();
 
     if (isStartingSDK) {
@@ -50,31 +49,22 @@ const onSuccessSelphiExtraction = (result) =>
 {
     console.log('Enter to onSuccessWidgetExtraction');
     // Here must return the value of processing Widget if is a success.
-
-    if (result == null || result == undefined) {
-        showErrorUI(fphi_str_unknown_error);
-    }
-    else
+    switch (parseInt(result['finishStatus']))
     {
-        switch (parseInt(result['finishStatus']))
-        {
-            case SdkMobileFinishStatus.Ok: // OK
-                selphiResponse = result;
-                var rowWidth = (window.screen.availWidth).toString() + 'px';
-                document.getElementById("bestImg").src = 'data:image/jpeg;base64,' + result.bestImage;
-                $("#bestImg").css("height", "95%").css("width", "100%");
-                //$("#authenticationResponse").css("width", rowWidth).show();
-                $("#authenticationResponse").show();
-                $("#messageResult").css("color", "#000000").hide();
+        case SdkMobileFinishStatus.Ok: // OK
+            selphiResponse = result;
+            document.getElementById("bestImg").src = 'data:image/jpeg;base64,' + result.bestImage;
 
-                break;
+            $("#bestImg").css("height", "95%").css("width", "100%");
+            $("#authenticationResponse").show();
+            $("#messageResult").css("color", "#000000").hide();
+            break;
 
-            case SdkMobileFinishStatus.Error: // Error
-                showErrorUI(result['errorType']);
-                break;
+        case SdkMobileFinishStatus.Error: // Error
+            showErrorUI(result['errorType']);
+            break;
 
-            default:
-                showErrorUI(fphi_str_unknown_error);
-        }
+        default:
+            showErrorUI(fphi_str_unknown_error);
     }
 };

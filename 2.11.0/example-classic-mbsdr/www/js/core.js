@@ -12,7 +12,7 @@ function callCloseSession()
     facephi.plugins.sdkcore.launchCloseSession({"operationEventTracking": SdkMobileEventTracking.Success})
     .then(
         (result) => { console.log(result); },
-        (err) => console.log(err),
+        (err) => showErrorUI(err),
     )
     .finally (() =>
     {
@@ -44,7 +44,7 @@ function callInitSession()
                 showErrorUI(result['errorType']);
             }
         },
-        (err) => console.log(err),
+        (err) => showErrorUI(err),
     )
     .finally (() =>
     {
@@ -83,7 +83,7 @@ function callInitOperation()
                 showErrorUI(result['errorType']);
             }
         },
-        (err) => console.log(err),
+        (err) => showErrorUI(err),
     )
     .finally (() =>
     {
@@ -112,17 +112,17 @@ function callGetExtraData()
     data = null;
     facephi.plugins.sdkcore.launchGetExtraData()
     .then(
-        (result) => {
+        (result) => 
+        {
             console.log(result);
-            if (parseInt(result.finishStatus) == 1)
+            if (parseInt(result.finishStatus) == SdkMobileFinishStatus.Ok)
             {
                 data = result.data;
-
                 passiveLivenessEvaluate();
                 authenticateFacialDocument();
             }
         },
-        (err) => console.log(err),
+        (err) => showErrorUI(err),
     )
     .finally (() =>
     {
