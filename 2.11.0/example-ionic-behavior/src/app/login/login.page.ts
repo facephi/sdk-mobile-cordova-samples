@@ -70,7 +70,7 @@ export class LoginPage implements OnInit, AfterViewInit {
         await this.launchSetAutoLogoutAction();
         await this.launchSetPosition('Login');
       } else if (result.finishStatus === this.behaviorService.finishError) {
-        this.setError(result.errorMessage || result.errorType || 'Unknown error');
+        this.setError(result.errorMessage || result.errorType.replaceAll('_', ' ') || 'Unknown error');
       }
     } catch (error) {
       console.log('Error initialize', error);
@@ -119,7 +119,7 @@ export class LoginPage implements OnInit, AfterViewInit {
       if (result.finishStatus === this.behaviorService.finishOk) {
         this.behaviorService.sessionId = sessionId;
       } else if (result.finishStatus === this.behaviorService.finishError) {
-        this.setError(result.errorMessage || result.errorType || 'Unknown error');
+        this.setError(result.errorMessage || result.errorType.replaceAll('_', ' ') || 'Unknown error');
       }
     } catch (error) {
       console.log('Error setSessionId', error);
@@ -140,7 +140,7 @@ export class LoginPage implements OnInit, AfterViewInit {
       if (result.finishStatus === this.behaviorService.finishOk) {
         this.behaviorService.userId = user;
       } else if (result.finishStatus === this.behaviorService.finishError) {
-        this.setError(result.errorMessage || result.errorType || 'Unknown error');
+        this.setError(result.errorMessage || result.errorType.replaceAll('_', ' ') || 'Unknown error');
       }
     } catch (error) {
       console.log('Error setUserId', error);
@@ -159,7 +159,7 @@ export class LoginPage implements OnInit, AfterViewInit {
       console.log('setPosition result', result);
 
       if (result.finishStatus === this.behaviorService.finishError) {
-        this.setError(result.errorMessage || result.errorType || 'Unknown error');
+        this.setError(result.errorMessage || result.errorType.replaceAll('_', ' ') || 'Unknown error');
       }
     } catch (error) {
       console.log('Error setPosition', error);
