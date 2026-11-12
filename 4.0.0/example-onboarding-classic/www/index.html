@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="viewport" content="initial-scale=1, width=device-width, viewport-fit=cover">
+    <link rel="stylesheet" href="css/styles.css" />
+    <link rel="stylesheet" href="css/loading.css" />
+    <title>Onboarding</title>
+</head>
+<body>
+    <header class="app-bar">
+        <h1>Onboarding</h1>
+        <button id="themeToggle" class="icon-button" type="button" onclick="toggleTheme()" aria-label="Tema oscuro">
+            <svg class="icon-moon" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 14.5A8.5 8.5 0 1 1 9.5 3 7 7 0 0 0 21 14.5z"/></svg>
+            <svg class="icon-sun" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
+        </button>
+    </header>
+
+    <main class="screen">
+        <section class="hero">
+            <p class="hero-kicker">Identidad</p>
+            <h2>Verifica en un momento</h2>
+            <p>Rostro, documento y datos extra, en ese orden.</p>
+        </section>
+
+        <div id="messageResult"></div>
+
+        <div class="section-title">
+            <h2>Captura</h2>
+            <p>Elige el paso que quieres lanzar.</p>
+        </div>
+
+        <button id="cardSelphi" class="action-card" type="button">
+            <span class="action-icon">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="8" r="3"/><path d="M5 19c1.2-3 3.4-4.5 7-4.5S17.8 16 19 19"/><path d="M16 6.5c.8.6 1.3 1.5 1.3 2.5"/></svg>
+            </span>
+            <span class="action-copy">
+                <span class="action-title">Selphi</span>
+                <span class="action-subtitle">Captura facial y prueba de vida</span>
+            </span>
+            <svg class="action-arrow" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+            <svg class="action-check" width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20zm-1.2 14.2-3.5-3.5 1.4-1.4 2.1 2.1 4.5-4.5 1.4 1.4-5.9 5.9z"/></svg>
+        </button>
+
+        <button id="cardSelphid" class="action-card" type="button">
+            <span class="action-icon">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="9" cy="12" r="2"/><path d="M14 10h4M14 14h4"/></svg>
+            </span>
+            <span class="action-copy">
+                <span class="action-title">SelphID</span>
+                <span class="action-subtitle">Anverso, reverso y lectura del documento</span>
+            </span>
+            <svg class="action-arrow" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+            <svg class="action-check" width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20zm-1.2 14.2-3.5-3.5 1.4-1.4 2.1 2.1 4.5-4.5 1.4 1.4-5.9 5.9z"/></svg>
+        </button>
+
+        <button id="btnExtra" class="filled-button" type="button" onclick="callGetExtraData()" disabled>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><ellipse cx="12" cy="6" rx="7" ry="3"/><path d="M5 6v6c0 1.7 3.1 3 7 3s7-1.3 7-3V6"/><path d="M5 12v6c0 1.7 3.1 3 7 3s7-1.3 7-3v-6"/></svg>
+            Get ExtraData
+        </button>
+        <p id="extraHint" class="hint">Se activa al tener rostro y documento.</p>
+
+        <section id="results" style="display:none;">
+            <div class="section-title">
+                <h2>Resultados</h2>
+                <p>Lo que devolvió la última captura.</p>
+            </div>
+            <div class="surface surface-pad">
+                <div id="authenticationResponse" style="display:none;">
+                    <p class="result-label">Rostro</p>
+                    <div class="face-frame"><img id="bestImg" alt="Rostro"></div>
+                </div>
+                <div id="selphidResponse" style="display:none;">
+                    <div id="frontBlock" style="display:none;">
+                        <p class="result-label">Anverso</p>
+                        <div class="doc-frame"><img id="frontImg" alt="Anverso"></div>
+                    </div>
+                    <div id="backBlock" style="display:none;">
+                        <p class="result-label">Reverso</p>
+                        <div class="doc-frame"><img id="backImg" alt="Reverso"></div>
+                    </div>
+                    <div id="faceBlock" style="display:none;">
+                        <p class="result-label">Foto</p>
+                        <div class="doc-frame portrait"><img id="selfieImg" alt="Foto del documento"></div>
+                    </div>
+                    <button id="btnDocData" class="outline-button" type="button" style="display:none;" onclick="openDocumentSheet()">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M7 3h7l5 5v13a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1z"/><path d="M14 3v6h6M8 13h8M8 17h8"/></svg>
+                        Datos del documento
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <div class="section-title">
+            <h2>Sesión</h2>
+            <p>La sesión se abre sola al entrar.</p>
+        </div>
+        <div class="surface">
+            <button class="menu-tile" type="button" onclick="callInitSession()">
+                <span class="menu-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M10 9l6 3-6 3z"/></svg></span>
+                <span>Init Session</span>
+                <svg class="chevron" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 6l6 6-6 6"/></svg>
+            </button>
+            <hr class="menu-divider">
+            <button class="menu-tile" type="button" onclick="callInitOperation()">
+                <span class="menu-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M5 15l7-10 7 10"/><path d="M8 15h8v5H8z"/></svg></span>
+                <span>Init Operation</span>
+                <svg class="chevron" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 6l6 6-6 6"/></svg>
+            </button>
+            <hr class="menu-divider">
+            <button class="menu-tile is-danger" type="button" onclick="callCloseSession()">
+                <span class="menu-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M10 7V5a1 1 0 0 1 1-1h8v16h-8a1 1 0 0 1-1-1v-2"/><path d="M4 12h11M12 8l4 4-4 4"/></svg></span>
+                <span>Close Session</span>
+                <svg class="chevron" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 6l6 6-6 6"/></svg>
+            </button>
+        </div>
+
+        <div class="section-title">
+            <h2>Flujos</h2>
+            <p>O lanza un flujo ya configurado.</p>
+        </div>
+        <div class="surface">
+            <button class="menu-tile" type="button" onclick="callGetFlows()">
+                <span class="menu-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M6 4v6M18 14v6M6 10h6a4 4 0 0 1 4 4v0"/><circle cx="6" cy="4" r="2"/><circle cx="18" cy="14" r="2"/><circle cx="6" cy="20" r="2"/></svg></span>
+                <span>Get Flows</span>
+                <svg class="chevron" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 6l6 6-6 6"/></svg>
+            </button>
+            <div id="flowSelected" style="display:none;">
+                <hr class="menu-divider">
+                <div class="flow-selected">
+                    <p>Flujo seleccionado</p>
+                    <strong id="flowLabel"></strong>
+                    <button id="btnLaunchFlow" class="filled-button" type="button" onclick="callFlow()" disabled>
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M13 3L5 14h7l-1 7 8-11h-7z"/></svg>
+                        Launch Flow
+                    </button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <div id="loader" class="lds-dual-ring hidden overlay"></div>
+
+    <div id="docSheet" class="sheet">
+        <div class="sheet-backdrop" onclick="closeSheet('docSheet')"></div>
+        <div class="sheet-panel">
+            <div class="sheet-handle"></div>
+            <h3>Datos del documento</h3>
+            <div id="docSheetBody"></div>
+        </div>
+    </div>
+
+    <div id="flowsSheet" class="sheet">
+        <div class="sheet-backdrop" onclick="closeSheet('flowsSheet')"></div>
+        <div class="sheet-panel">
+            <div class="sheet-handle"></div>
+            <h3>Flujos disponibles</h3>
+            <div id="flowsSheetBody"></div>
+        </div>
+    </div>
+
+    <div id="myModal" class="sheet">
+        <div class="sheet-backdrop" onclick="closeSheet('myModal')"></div>
+        <div class="sheet-panel modal-content">
+            <button class="sheet-close" type="button" onclick="closeSheet('myModal')">&times;</button>
+            <div class="sheet-handle"></div>
+            <h3>Resultado</h3>
+        </div>
+    </div>
+
+    <div id="selphiSheet" class="sheet">
+        <div class="sheet-backdrop" onclick="closeSheet('selphiSheet')"></div>
+        <div class="sheet-panel sheet-panel-tall">
+            <div class="sheet-handle"></div>
+            <h3>Configuración Selphi</h3>
+            <p class="sheet-intro">Estos valores se usan al pulsar Selphi.</p>
+            <div class="sheet-scroll">
+                <label class="config-row">
+                    <span>LivenessMode</span>
+                    <select data-config="selphi" data-key="livenessMode">
+                        <option value="">DEFAULT</option>
+                        <option value="PASSIVE">PASSIVE</option>
+                        <option value="MOVE">MOVE</option>
+                        <option value="NONE">NONE</option>
+                    </select>
+                </label>
+                <label class="config-row">
+                    <span>ExtractionDuration</span>
+                    <select data-config="selphi" data-key="extractionDuration">
+                        <option value="">DEFAULT</option>
+                        <option value="SHORT">SHORT</option>
+                        <option value="MEDIUM">MEDIUM</option>
+                        <option value="LONG">LONG</option>
+                    </select>
+                </label>
+                <label class="config-row">
+                    <span>CameraPreferred</span>
+                    <select data-config="selphi" data-key="cameraPreferred">
+                        <option value="FRONT">Front</option>
+                        <option value="BACK">Back</option>
+                    </select>
+                </label>
+                <label class="config-row">
+                    <span>CompressFormat</span>
+                    <select data-config="selphi" data-key="compressFormat">
+                        <option value="jpeg">JPEG</option>
+                        <option value="png">PNG</option>
+                    </select>
+                </label>
+                <label class="config-row">
+                    <span>JPG Quality (0–1)</span>
+                    <input data-config="selphi" data-key="jpgQuality" data-decimal="true" inputmode="decimal" autocomplete="off">
+                </label>
+                <label class="config-row">
+                    <span>CropPercent (0–1)</span>
+                    <input data-config="selphi" data-key="cropPercent" data-decimal="true" inputmode="decimal" autocomplete="off">
+                </label>
+                <label class="config-row">
+                    <span>CameraId</span>
+                    <input data-config="selphi" data-key="cameraId" data-digits="true" inputmode="numeric" autocomplete="off">
+                </label>
+                <label class="config-row">
+                    <span>VideoFilename</span>
+                    <input data-config="selphi" data-key="videoFilename" autocomplete="off">
+                </label>
+                <label class="config-row">
+                    <span>ResourcesPath</span>
+                    <input data-config="selphi" data-key="resourcesPath" autocomplete="off" placeholder="fphi-selphi-widget-resources-sdk.zip">
+                </label>
+                <button type="button" class="config-switch" data-config="selphi" data-key="enableGenerateTemplateRaw"><span>EnableGenerateTemplateRaw</span><span class="switch"></span></button>
+                <button type="button" class="config-switch" data-config="selphi" data-key="qrMode"><span>QrMode</span><span class="switch"></span></button>
+                <button type="button" class="config-switch" data-config="selphi" data-key="showTutorial"><span>ShowTutorial</span><span class="switch"></span></button>
+                <button type="button" class="config-switch" data-config="selphi" data-key="showPreviousTip"><span>ShowPreviousTip</span><span class="switch"></span></button>
+                <button type="button" class="config-switch" data-config="selphi" data-key="showResultAfterCapture"><span>ShowResultAfterCapture</span><span class="switch"></span></button>
+                <button type="button" class="config-switch" data-config="selphi" data-key="showDiagnostic"><span>ShowDiagnostic</span><span class="switch"></span></button>
+                <button type="button" class="config-switch" data-config="selphi" data-key="vibrationEnabled"><span>VibrationEnabled</span><span class="switch"></span></button>
+                <button type="button" class="config-switch" data-config="selphi" data-key="debug"><span>Debug</span><span class="switch"></span></button>
+                <button type="button" class="config-switch" data-config="selphi" data-key="logImages"><span>LogImages</span><span class="switch"></span></button>
+                <button type="button" class="config-switch" data-config="selphi" data-key="stabilizationMode"><span>StabilizationMode</span><span class="switch"></span></button>
+                <button type="button" class="config-switch" data-config="selphi" data-key="templateRawOptimized"><span>TemplateRawOptimized</span><span class="switch"></span></button>
+                <button type="button" class="config-switch" data-config="selphi" data-key="fullscreen"><span>Fullscreen</span><span class="switch"></span></button>
+                <button type="button" class="config-switch" data-config="selphi" data-key="cameraFlashEnabled"><span>CameraFlashEnabled</span><span class="switch"></span></button>
+                <button type="button" class="config-switch" data-config="selphi" data-key="cropImageDebug"><span>CropImageDebug</span><span class="switch"></span></button>
+                <div id="selphiMoveFields" style="display:none;">
+                    <label class="config-row">
+                        <span>MoveSuccessfulAttempts</span>
+                        <input data-config="selphi" data-key="moveSuccessfulAttempts" data-digits="true" inputmode="numeric" autocomplete="off">
+                    </label>
+                    <label class="config-row">
+                        <span>MoveFailedAttempts</span>
+                        <input data-config="selphi" data-key="moveFailedAttempts" data-digits="true" inputmode="numeric" autocomplete="off">
+                    </label>
+                </div>
+                <button class="outline-button" type="button" onclick="restoreSelphiSettings()">Restaurar valores</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="selphidSheet" class="sheet">
+        <div class="sheet-backdrop" onclick="closeSheet('selphidSheet')"></div>
+        <div class="sheet-panel sheet-panel-tall">
+            <div class="sheet-handle"></div>
+            <h3>Configuración SelphID</h3>
+            <p class="sheet-intro">Estos valores se usan al pulsar SelphID.</p>
+            <div class="sheet-scroll">
+                <label class="config-row">
+                    <span>DocumentType</span>
+                    <select data-config="selphid" data-key="documentType">
+                        <option value="DT_IDCard">IDCARD</option>
+                        <option value="DT_Passport">PASSPORT</option>
+                        <option value="DT_DriversLicense">DRIVERSLICENSE</option>
+                        <option value="DT_ForeignCard">FOREIGNCARD</option>
+                        <option value="DT_CreditCard">CREDITCARD</option>
+                        <option value="DT_Custom">CUSTOM</option>
+                        <option value="DT_Visa">VISA</option>
+                    </select>
+                </label>
+                <label class="config-row">
+                    <span>DocumentSide</span>
+                    <select data-config="selphid" data-key="documentSide">
+                        <option value="">DEFAULT</option>
+                        <option value="Front">FRONT</option>
+                        <option value="Back">BACK</option>
+                    </select>
+                </label>
+                <label class="config-row">
+                    <span>ScanMode</span>
+                    <select data-config="selphid" data-key="scanMode">
+                        <option value="Generic">GENERIC</option>
+                        <option value="Specific">SPECIFIC</option>
+                        <option value="Search">SEARCH</option>
+                    </select>
+                </label>
+                <div id="selphidSpecificFields" style="display:none;">
+                    <label class="config-row">
+                        <span>SpecificData</span>
+                        <input data-config="selphid" data-key="specificData" autocomplete="off" autocapitalize="characters">
+                    </label>
+                    <p class="config-helper">Código del documento cuando ScanMode es Specific.</p>
+                </div>
+                <label class="config-row">
+                    <span>Timeout</span>
+                    <select data-config="selphid" data-key="timeout">
+                        <option value="">DEFAULT</option>
+                        <option value="Short">SHORT</option>
+                        <option value="Medium">MEDIUM</option>
+                        <option value="Long">LONG</option>
+                        <option value="VeryLong">VERYLONG</option>
+                    </select>
+                </label>
+                <button type="button" class="config-switch" data-config="selphid" data-key="wizardMode"><span>WizardMode</span><span class="switch"></span></button>
+                <button type="button" class="config-switch" data-config="selphid" data-key="showTutorial"><span>ShowTutorial</span><span class="switch"></span></button>
+                <button type="button" class="config-switch" data-config="selphid" data-key="tutorialOnly"><span>TutorialOnly</span><span class="switch"></span></button>
+                <button type="button" class="config-switch" data-config="selphid" data-key="showPreviousTip"><span>ShowPreviousTip</span><span class="switch"></span></button>
+                <button type="button" class="config-switch" data-config="selphid" data-key="showResultAfterCapture"><span>ShowResultAfterCapture</span><span class="switch"></span></button>
+                <button type="button" class="config-switch" data-config="selphid" data-key="showDiagnostic"><span>ShowDiagnostic</span><span class="switch"></span></button>
+                <button type="button" class="config-switch" data-config="selphid" data-key="vibrationEnabled"><span>VibrationEnabled</span><span class="switch"></span></button>
+                <button type="button" class="config-switch" data-config="selphid" data-key="generateRawImages"><span>GenerateRawImages</span><span class="switch"></span></button>
+                <button type="button" class="config-switch" data-config="selphid" data-key="encodedDataFocusEnabled"><span>EncodedDataFocusEnabled</span><span class="switch"></span></button>
+                <button type="button" class="config-switch" data-config="selphid" data-key="debug"><span>Debug</span><span class="switch"></span></button>
+                <button type="button" class="config-switch" data-config="selphid" data-key="fullscreen"><span>Fullscreen</span><span class="switch"></span></button>
+                <button type="button" class="config-switch" data-config="selphid" data-key="showDocumentSelector"><span>ShowDocumentSelector</span><span class="switch"></span></button>
+                <div id="selphidSelectorFields" style="display:none;">
+                    <p class="config-label">EnabledDocumentTypes</p>
+                    <div class="config-chips" id="selphidEnabledDocumentTypes"></div>
+                    <label class="config-row">
+                        <span>EnabledCountries</span>
+                        <input data-config="selphid" data-key="enabledCountries" data-upper="true" autocomplete="off" autocapitalize="characters">
+                    </label>
+                    <p class="config-helper">Separados por coma. Vacío usa el valor del SDK.</p>
+                </div>
+                <label class="config-row">
+                    <span>CompressFormat</span>
+                    <select data-config="selphid" data-key="compressFormat">
+                        <option value="jpeg">JPEG</option>
+                        <option value="png">PNG</option>
+                    </select>
+                </label>
+                <label class="config-row">
+                    <span>JPG Quality (0–1)</span>
+                    <input data-config="selphid" data-key="jpgQuality" data-decimal="true" inputmode="decimal" autocomplete="off">
+                </label>
+                <label class="config-row">
+                    <span>TokenImageQuality (0–1)</span>
+                    <input data-config="selphid" data-key="tokenImageQuality" data-decimal="true" inputmode="decimal" autocomplete="off">
+                </label>
+                <label class="config-row">
+                    <span>CameraId</span>
+                    <input data-config="selphid" data-key="cameraId" data-digits="true" inputmode="numeric" autocomplete="off">
+                </label>
+                <label class="config-row">
+                    <span>VideoFileName</span>
+                    <input data-config="selphid" data-key="videoFileName" autocomplete="off">
+                </label>
+                <label class="config-row">
+                    <span>ResourcesPath</span>
+                    <input data-config="selphid" data-key="resourcesPath" autocomplete="off" placeholder="fphi-selphid-widget-resources-sdk.zip">
+                </label>
+                <button class="outline-button" type="button" onclick="restoreSelphidSettings()">Restaurar valores</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="cordova.js"></script>
+    <script src="js/lib/jquery-1.11.3.min.js"></script>
+    <script src="js/strings.js"></script>
+    <script src="js/ui.js"></script>
+    <script src="js/index.js"></script>
+    <script src="js/config.js"></script>
+    <script src="js/selphi.js"></script>
+    <script src="js/selphid.js"></script>
+    <script src="js/events.js"></script>
+    <script src="js/core.js"></script>
+    <script src="js/api/serverApiCall.js"></script>
+</body>
+</html>
