@@ -267,10 +267,9 @@ function bindLongPress(id, launch, openConfig) {
     });
 
     element.addEventListener("pointermove", function (event) {
-        var dx = state.origin ? event.clientX - state.origin.x : null;
-        var dy = state.origin ? event.clientY - state.origin.y : null;
-        window.__press = { dx: dx, dy: dy, timer: !!state.timer, origin: state.origin };
         if (!state.origin || !state.timer) return;
+        var dx = event.clientX - state.origin.x;
+        var dy = event.clientY - state.origin.y;
         if (dx * dx + dy * dy > 144) clearPress(state);
     });
 

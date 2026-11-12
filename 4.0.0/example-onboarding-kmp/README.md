@@ -58,23 +58,26 @@ La UI (`www/index.html`) llama a estas funciones:
 
 | Botón | Función | Archivo |
 |-------|---------|---------|
-| INIT SESSION | `callInitSession()` | `www/js/core.js` |
-| CLOSE SESSION | `callCloseSession()` | `www/js/core.js` |
-| INIT OPERATION | `callInitOperation()` | `www/js/core.js` |
-| SELPHI | `callSelphi()` | `www/js/selphi.js` |
-| SELPHID | `callSelphID()` | `www/js/selphid.js` |
-| EXTRADATA | `callGetExtraData()` | `www/js/core.js` |
-| FLOW | `callFlow()` | `www/js/core.js` |
+| Init Session | `callInitSession()` | `www/js/core.js` |
+| Init Operation | `callInitOperation()` | `www/js/core.js` |
+| Close Session | `callCloseSession()` | `www/js/core.js` |
+| Selphi | `callSelphi()` | `www/js/selphi.js` |
+| SelphID | `callSelphID()` | `www/js/selphid.js` |
+| Get ExtraData | `callGetExtraData()` | `www/js/core.js` |
+| Get Flows | `callGetFlows()` | `www/js/core.js` |
+| Launch Flow | `callFlow()` | `www/js/core.js` |
+
+Mantener pulsada la tarjeta Selphi o SelphID abre su hoja de configuración (`www/js/config.js`). Un toque corto lanza el widget con esos valores. Restaurar valores vuelve al arranque de este ejemplo.
 
 Orden habitual del onboarding manual:
 
 1. `launchInitSession`
 2. `launchInitOperation`
-3. `launchSelphID` y `launchSelphi`
+3. `launchSelphi` y `launchSelphID`
 4. `launchGetExtraData`
 5. `launchCloseSession`
 
-`FLOW` es la alternativa: el SDK encadena SelphID y Selphi con un identificador de flow.
+Get Flows lista los flujos disponibles. Launch Flow es la alternativa: el SDK encadena SelphID y Selphi con el identificador elegido.
 
 ## Core
 
@@ -144,14 +147,10 @@ Otros métodos del core: `launchGetSessionId()`, `launchGetOperationId()`, `laun
 
 Namespace: `facephi.plugins.sdkselphi`.
 
-Captura facial en modo liveness pasivo. La configuración del ejemplo está en `callSelphi()` (`www/js/selphi.js`):
+Captura facial en modo liveness pasivo. `callSelphi()` lanza la configuración que arma `buildSelphiConfig()` (`www/js/config.js`):
 
 ```javascript
-var config = new SdkSelphiConfig();
-config.setLivenessMode(facephi.plugins.livenessmode.SdkSelphiLivenessMode.PassiveMode);
-config.setEnableFullscreen(true);
-config.setResourcesPath("fphi-selphi-widget-resources-sdk.zip");
-config.setShowDiagnostic(false);
+var config = buildSelphiConfig();
 
 facephi.plugins.sdkselphi.launchSelphi(config).then(function (result) {
     if (parseInt(result.finishStatus) === SdkMobileFinishStatus.Ok) {
@@ -162,7 +161,18 @@ facephi.plugins.sdkselphi.launchSelphi(config).then(function (result) {
 });
 ```
 
-El ZIP de recursos viaja con el plugin (`fphi-selphi-widget-resources-sdk.zip`).
+Valores con los que arranca este ejemplo:
+
+| Campo | Valor |
+|-------|-------|
+| `livenessMode` | `LIVENESS_PASSIVE` |
+| `cameraPreferred` | `front` |
+| `jpgQuality` | `95` |
+| `enableGenerateTemplateRaw` | `true` |
+| `showTutorial` | `false` |
+| `showPreviousTip` | `false` |
+| `showDiagnostic` | `false` |
+| `qrMode` | `false` |
 
 ### Modos de liveness
 
@@ -175,7 +185,7 @@ El ZIP de recursos viaja con el plugin (`fphi-selphi-widget-resources-sdk.zip`).
 | `Liveness passive` | `LIVENESS_PASSIVE` |
 | `LivenessMove` | `LIVENESS_MOVE` |
 
-Este ejemplo usa `PassiveMode`. El valor nativo de liveness pasivo es `LIVENESS_PASSIVE`.
+Este ejemplo envía `LIVENESS_PASSIVE`. La clave del enum es `Liveness passive`.
 
 ### Otros parámetros habituales
 
@@ -183,14 +193,16 @@ Este ejemplo usa `PassiveMode`. El valor nativo de liveness pasivo es `LIVENESS_
 
 | Setter | Uso |
 |--------|-----|
-| `setShowTutorial(boolean)` | Tutorial previo |
-| `setCameraPreferred(value)` | `FRONT` o `BACK` |
+| `setLivenessMode(value)` | `LIVENESS_PASSIVE`, `LIVENESS_MOVE`, `LIVENESS_NONE`, `LIVENESS_NONE_STABILIZED` |
+| `setExtractionDuration(value)` | `SHORT`, `MEDIUM`, `LONG` |
+| `setCameraPreferred(value)` | `front` o `back` |
 | `setCameraShape(value)` | `CIRCULAR` o `SQUARE` |
 | `setEnableGenerateTemplateRaw(boolean)` | Incluye `templateRaw` en el resultado |
-| `setJPGQuality(number)` | Calidad JPG (0–100). Default `95` |
+| `setJPGQuality(number)` | Calidad JPG (0–100). En este ejemplo, `95` |
 | `setCompressFormat(value)` | `jpeg` o `png` |
+| `setShowTutorial(boolean)` | Tutorial previo |
 | `setShowResultAfterCapture(boolean)` | Pantalla de resultado |
-| `setExtractionTime(value)` | `SHORT`, `MEDIUM`, `LONG` |
+| `setQrMode(boolean)` | Lector QR antes del escaneo facial |
 
 ### Resultado
 
@@ -212,17 +224,10 @@ Otros métodos: `launchSignatureSelphi(config)`, `setSelphiFlow(config)`, `setSi
 
 Namespace: `facephi.plugins.sdkselphid`.
 
-Captura de DNI en modo búsqueda, timeout corto y país `AR`. La configuración del ejemplo está en `callSelphID()` (`www/js/selphid.js`):
+Captura de documento en modo `STANDARD`, timeout corto y país `AR`. `callSelphID()` lanza la configuración que arma `buildSelphidConfig()` (`www/js/config.js`):
 
 ```javascript
-var config = new SdkSelphIDConfig();
-config.showResultAfterCapture = true;
-config.showTutorial = false;
-config.scanMode = facephi.plugins.scanmode.SdkSelphIDScanMode.SearchMode;
-config.timeout = facephi.plugins.selphid.timeout.SdkSelphIDTimeout.Short;
-config.documentType = facephi.plugins.doctype.SdkSelphIDDocumentType.IDCard;
-config.resourcesPath = "fphi-selphid-widget-resources-sdk.zip";
-config.specificData = "AR|<ALL>";
+var config = buildSelphidConfig();
 
 facephi.plugins.sdkselphid.launchSelphID(config).then(function (result) {
     if (parseInt(result.finishStatus) === SdkMobileFinishStatus.Ok) {
@@ -235,25 +240,29 @@ facephi.plugins.sdkselphid.launchSelphID(config).then(function (result) {
 });
 ```
 
-El ZIP de recursos viaja con el plugin (`fphi-selphid-widget-resources-sdk.zip`).
+Valores con los que arranca este ejemplo:
 
-La misma configuración con los setters de `SdkSelphIDConfig` (`facephi.plugins.selphIDConfig`):
-
-```javascript
-var config = new SdkSelphIDConfig();
-config.setShowResultAfterCapture(true);
-config.setShowTutorial(false);
-config.setTimeout(facephi.plugins.selphid.timeout.SdkSelphIDTimeout.Short);
-config.setCaptureMode(facephi.plugins.capturemode.SdkSelphIDCaptureMode.FRONT);
-```
+| Campo | Valor |
+|-------|-------|
+| `documentTypes` | `["ID_Card"]` |
+| `defaultDocumentType` | `ID_Card` |
+| `defaultCountry` | `AR` |
+| `captureMode` | `STANDARD` |
+| `timeout` | `SHORT` |
+| `showTutorial` | `false` |
+| `showResultAfterCapture` | `true` |
+| `showDiagnostic` | `true` |
+| `generateRawImages` | `true` |
+| `compressFormat` | `jpeg` |
+| `jpgQuality` | `95` |
 
 ### Enums
 
 Timeout (`facephi.plugins.selphid.timeout.SdkSelphIDTimeout`): `Short`, `Medium`, `Long`, `VeryLong`.
 
-Tipo de documento (`facephi.plugins.doctype.SdkSelphIDDocumentType`): `IDCard`, `Passport`, `DriversLicense`, `ForeignCard`, `CreditCard`, `Custom`, `Visa`.
+Tipo de documento (`facephi.plugins.doctype.SdkSelphIDDocumentType`). Este ejemplo envía el valor, no la clave: `ID_Card`, `Passport`, `Drivers_License`, `Foreign_Card`, `Credit_Card`, `Custom`, `Visa`, `ALL`.
 
-Modo de captura (`facephi.plugins.capturemode.SdkSelphIDCaptureMode`): `FRONT`, `MRZ`, `STANDARD`.
+Modo de captura (`facephi.plugins.capturemode.SdkSelphIDCaptureMode`): `STANDARD`, `FRONT`, `MRZ`. Este ejemplo usa `STANDARD`.
 
 ### Resultado
 
@@ -276,7 +285,7 @@ También se puede envolver la respuesta con `facephi.plugins.selphIDResult.SdkSe
 ```javascript
 await facephi.plugins.sdkcore.launchInitFlow({
     customerId: CUSTOMER_ID,
-    flow: "YOUR_FLOW_ID"
+    flow: selectedFlowId
 });
 
 await facephi.plugins.sdkselphid.setSelphidFlow();
@@ -284,7 +293,7 @@ await facephi.plugins.sdkselphi.setSelphiFlow();
 await facephi.plugins.sdkcore.launchStartFlow();
 ```
 
-`flow` es el identificador del flow configurado en la plataforma Facephi.
+`selectedFlowId` es el identificador elegido en Get Flows. `launchGetFlowIntegrationData()` devuelve esa lista.
 
 ## Eventos
 
@@ -324,4 +333,4 @@ cordova run android
 cordova run ios
 ```
 
-La sesión se inicia sola. El resto de pasos se lanzan con los botones de la pantalla.
+La sesión se inicia sola. El resto de pasos se lanzan con los botones de la pantalla. Mantener pulsada Selphi o SelphID cambia la configuración antes de lanzarlas.
