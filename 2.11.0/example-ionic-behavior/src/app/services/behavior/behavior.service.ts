@@ -33,12 +33,28 @@ export class BehaviorService {
 
   initialize = async (): Promise<BehaviorResult> => {
     const licenseKey = this.platform.is('ios') ? LICENSE_APIKEY_IOS : LICENSE_APIKEY_ANDROID;
-    const widgetConfig: BehaviorConfiguration = {
+    const config: BehaviorConfiguration = {
       licenseKey,
       enableSupportLogs: true
     };
-    return facephi.plugins.wgt.behavior.initialize(widgetConfig);
+    return this.withTimeout(Promise.resolve(facephi.plugins.wgt.behavior.initialize(config)), 10000);
   };
+
+  private withTimeout(promise: Promise<BehaviorResult>, ms: number): Promise<BehaviorResult> {
+    let timer: ReturnType<typeof setTimeout> | undefined;
+    const timeout = new Promise<BehaviorResult>((resolve) => {
+      timer = setTimeout(() => {
+        resolve({
+          finishStatus: this.finishError,
+          finishStatusDescription: 'STATUS_ERROR',
+          errorType: 'TIMEOUT',
+          errorMessage: `initialize timeout after ${ms / 1000}s`
+        });
+      }, ms);
+    });
+
+    return Promise.race([promise, timeout]).finally(() => clearTimeout(timer));
+  }
 
   destroy = async (): Promise<BehaviorResult> => {
     return facephi.plugins.wgt.behavior.destroy();

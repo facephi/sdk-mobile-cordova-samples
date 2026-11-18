@@ -1,4 +1,5 @@
-export const USER_ID                = "ionic@facephi.com";
-// iOS: se aplica en initialize() JS. Android (esta versión): el bootstrap nativo usa "".
-export const LICENSE_APIKEY_ANDROID = "";
-export const LICENSE_APIKEY_IOS     = "";
+export const USER_ID                    = 'ionic@facephi.com';
+export const WGT_BEHAVIOR_EVENTS        = 'widget.behavior.events';
+export const APP_DARK_MODE_STORAGE_KEY  = 'app-dark-mode';
+export const LICENSE_APIKEY_ANDROID     = "";
+export const LICENSE_APIKEY_IOS         = "";
